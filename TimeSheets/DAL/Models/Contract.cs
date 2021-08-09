@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Models
 {
     public class Contract
     {
         public string Name { get; set; }
+        public List<Employee> Employees { get; set; }
+        public List<Client> Clients { get; set; }
     }
 }
