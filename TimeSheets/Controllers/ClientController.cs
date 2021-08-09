@@ -31,7 +31,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete()
+        public IActionResult Delete([FromRoute] string name)
         {
             return Ok();
         }
