@@ -8,7 +8,7 @@ namespace TimeSheets.DAL.Models
 {
     public class Contract
     {
-        public string Name { get; set; }
+        public int Number { get; set; }
         public List<Employee> Employees { get; set; }
         public List<Client> Clients { get; set; }
     }

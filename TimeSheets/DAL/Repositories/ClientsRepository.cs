@@ -10,22 +10,22 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ClientsRepository : IClientsRepository
     {
-        public Task AddObjects(Client objects)
+        public SortedDictionary<int, Client> AddObjects(Client objects, int parameter)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Client>> GetAllObjects()
+        public SortedDictionary<int, Client> GetAllObjects()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Client> ChangeObjects(Client objects)
+        public SortedDictionary<int, Client> ChangeObjects(Client obj, int parameter)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Client>> DeleteObjects(string name)
+        public SortedDictionary<int, Client> DeleteObjects(int parameter)
         {
             throw new NotImplementedException();
         }

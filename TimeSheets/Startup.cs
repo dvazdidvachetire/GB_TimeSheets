@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
+using TimeSheets.DAL.Repositories;
 
 namespace TimeSheets
 {
@@ -28,6 +30,11 @@ namespace TimeSheets
         {
 
             services.AddControllers();
+
+            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
+            services.AddSingleton<IClientsRepository, ClientsRepository>();
+            services.AddSingleton<IContractsRepository, ContractsRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TimeSheets", Version = "v1" });

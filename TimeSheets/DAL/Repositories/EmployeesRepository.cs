@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,24 +11,37 @@ namespace TimeSheets.DAL.Repositories
 {
     public class EmployeesRepository : IEmployeesRepository
     {
-        public Task AddObjects(Employee objects)
+        private readonly SortedDictionary<int, Employee> _employees = new SortedDictionary<int, Employee>();
+
+        public SortedDictionary<int, Employee> AddObjects(Employee employee, int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _employees.Add(id, employee);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
+
+            return _employees;
         }
 
-        public Task<List<Employee>> GetAllObjects()
+        public SortedDictionary<int, Employee> GetAllObjects()
         {
-            throw new NotImplementedException();
+            return _employees;
         }
 
-        public Task<Employee> ChangeObjects(Employee objects)
+        public SortedDictionary<int, Employee> ChangeObjects(Employee employee, int id)
         {
-            throw new NotImplementedException();
+            _employees[id] = employee;
+            return _employees;
         }
 
-        public Task<List<Employee>> DeleteObjects(string name)
+        public SortedDictionary<int, Employee> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            _employees.Remove(id);
+            return _employees;
         }
     }
 }

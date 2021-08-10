@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 
 namespace TimeSheets.Controllers
@@ -12,28 +13,39 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        [HttpPost("employee")]
-        public IActionResult Create([FromBody] Employee employee)
+        private readonly IEmployeesRepository _repository;
+
+        public EmployeeController(IEmployeesRepository repository)
         {
-            return Ok();
+            _repository = repository;
+        }
+
+        [HttpPost("employee/{id}")]
+        public IActionResult Create([FromBody] Employee employee, [FromRoute] int id)
+        {
+            var employees = _repository.AddObjects(employee, id);
+            return Ok(employees);
         }
 
         [HttpGet("employees")]
         public IActionResult Read()
         {
-            return Ok();
+            var employees = _repository.GetAllObjects();
+            return Ok(employees);
         }
 
-        [HttpPut("change")]
-        public IActionResult Update([FromBody] Employee employee)
+        [HttpPut("change/{id}")]
+        public IActionResult Update([FromBody] Employee employee, [FromRoute] int id)
         {
-            return Ok();
+            var employees = _repository.ChangeObjects(employee, id);
+            return Ok(employees);
         }
 
-        [HttpDelete("delete")]
-        public IActionResult Delete([FromRoute] string name)
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            return Ok();
+            var employees = _repository.DeleteObjects(id);
+            return Ok(employees);
         }
     }
 }

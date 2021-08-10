@@ -7,7 +7,7 @@ using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DAL.Interfaces
 {
-    public interface IClientsRepository : IRepository<Client>
+    public interface IClientsRepository : IRepository<Client, int>
     {
     }
 }

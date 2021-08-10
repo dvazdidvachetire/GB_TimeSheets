@@ -10,22 +10,22 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ContractsRepository : IContractsRepository
     {
-        public Task AddObjects(Contract objects)
+        public SortedDictionary<int, Contract> AddObjects(Contract objects, int parameter)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Contract>> GetAllObjects()
+        public SortedDictionary<int, Contract> GetAllObjects()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Contract> ChangeObjects(Contract objects)
+        public SortedDictionary<int, Contract> ChangeObjects(Contract obj, int parameter)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<Contract>> DeleteObjects(string name)
+        public SortedDictionary<int, Contract> DeleteObjects(int parameter)
         {
             throw new NotImplementedException();
         }
