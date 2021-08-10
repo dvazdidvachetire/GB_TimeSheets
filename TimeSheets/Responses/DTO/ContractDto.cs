@@ -9,11 +9,12 @@ namespace TimeSheets.Responses.DTO
 {
     public class ContractDto
     {
+        public int Id { get; set; }
         public int NumberContract { get; set; }
         public Client Client { get; set; }
         public string TypeJob { get; set; }
         public int QuantityJob { get; set; }
         public decimal Price { get; set; }
-        public SortedDictionary<int, Employee> Employees { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
     }
 }

@@ -11,13 +11,13 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ClientsRepository : IClientsRepository
     {
-        private SortedDictionary<int, Client> _clients = new SortedDictionary<int, Client>();
+        private IList<Client> _clients = new List<Client>();
 
-        public SortedDictionary<int, Client> AddObjects(Client client, int id)
+        public IEnumerable<Client> AddObjects(Client client)
         {
             try
             {
-                _clients.Add(id, client);
+                _clients.Add(client);
             }
             catch (Exception e)
             {
@@ -27,20 +27,34 @@ namespace TimeSheets.DAL.Repositories
             return _clients;
         }
 
-        public SortedDictionary<int, Client> GetAllObjects()
+        public IEnumerable<Client> GetAllObjects()
         {
             return _clients;
         }
 
-        public SortedDictionary<int, Client> ChangeObjects(Client client, int id)
+        public IEnumerable<Client> ChangeObjects(Client client)
         {
-            _clients[id] = client;
+            for (int i = 0; i < _clients.Count; i++)
+            {
+                if (_clients[i].Id == client.Id)
+                {
+                    _clients[i] = client;
+                }
+            }
+
             return _clients;
         }
 
-        public SortedDictionary<int, Client> DeleteObjects(int id)
+        public IEnumerable<Client> DeleteObjects(int id)
         {
-            _clients.Remove(id);
+            for (int i = 0; i < _clients.Count; i++)
+            {
+                if (id == _clients[i].Id)
+                {
+                    _clients.RemoveAt(i);
+                }
+            }
+
             return _clients;
         }
     }

@@ -21,24 +21,11 @@ namespace TimeSheets.Controllers
             _repository = repository;
         }
 
-        [HttpPost("contract/{id}")]
-        public IActionResult Create([FromBody] Contract contract, [FromRoute] int id)
+        [HttpPost("contract")]
+        public IActionResult Create([FromBody] Contract contract)
         {
-            var contracts = _repository.AddObjects(contract, id);
-            var newContracts = new SortedDictionary<int, ContractDto>();
-
-            foreach (var cont in contracts)
-            {
-                newContracts.Add(cont.Key, new ContractDto
-                {
-                    NumberContract = cont.Value.NumberContract,
-                    Client = cont.Value.Client,
-                    Employees = cont.Value.Employees,
-                    TypeJob = cont.Value.TypeJob,
-                    QuantityJob = cont.Value.QuantityJob,
-                    Price = cont.Value.Price
-                });
-            }
+            var contracts = _repository.AddObjects(contract);
+            var newContracts = _repository.ContractDtos;
 
             return Ok(newContracts);
         }
@@ -46,19 +33,14 @@ namespace TimeSheets.Controllers
         [HttpGet("contracts")]
         public IActionResult Read()
         {
-            return Ok();
+            return Ok(_repository.ContractDtos);
         }
 
-        [HttpPut("change")]
-        public IActionResult Update([FromBody] Contract contract, [FromRoute] int id)
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            return Ok();
-        }
-
-        [HttpDelete("")]
-        public IActionResult Delete([FromRoute] string name)
-        {
-            return Ok();
+            _repository.DeleteObjects(id);
+            return Ok(_repository.ContractDtos);
         }
     }
 }

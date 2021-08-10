@@ -11,13 +11,13 @@ namespace TimeSheets.DAL.Repositories
 {
     public class EmployeesRepository : IEmployeesRepository
     {
-        private readonly SortedDictionary<int, Employee> _employees = new SortedDictionary<int, Employee>();
+        private readonly IList<Employee> _employees = new List<Employee>();
 
-        public SortedDictionary<int, Employee> AddObjects(Employee employee, int id)
+        public IEnumerable<Employee> AddObjects(Employee employee)
         {
             try
             {
-                _employees.Add(id, employee);
+                _employees.Add(employee);
             }
             catch (Exception e)
             {
@@ -27,20 +27,34 @@ namespace TimeSheets.DAL.Repositories
             return _employees;
         }
 
-        public SortedDictionary<int, Employee> GetAllObjects()
+        public IEnumerable<Employee> GetAllObjects()
         {
             return _employees;
         }
 
-        public SortedDictionary<int, Employee> ChangeObjects(Employee employee, int id)
+        public IEnumerable<Employee> ChangeObjects(Employee employee)
         {
-            _employees[id] = employee;
+            for (int i = 0; i < _employees.Count; i++)
+            {
+                if (_employees[i].Id == employee.Id)
+                {
+                    _employees[i] = employee;
+                }
+            }
+
             return _employees;
         }
 
-        public SortedDictionary<int, Employee> DeleteObjects(int id)
+        public IEnumerable<Employee> DeleteObjects(int id)
         {
-            _employees.Remove(id);
+            for (int i = 0; i < _employees.Count; i++)
+            {
+                if (id == _employees[i].Id)
+                {
+                    _employees.RemoveAt(i);
+                }
+            }
+
             return _employees;
         }
     }

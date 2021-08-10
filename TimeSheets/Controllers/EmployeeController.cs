@@ -20,10 +20,10 @@ namespace TimeSheets.Controllers
             _repository = repository;
         }
 
-        [HttpPost("employee/{id}")]
-        public IActionResult Create([FromBody] Employee employee, [FromRoute] int id)
+        [HttpPost("employee")]
+        public IActionResult Create([FromBody] Employee employee)
         {
-            var employees = _repository.AddObjects(employee, id);
+            var employees = _repository.AddObjects(employee);
             return Ok(employees);
         }
 
@@ -34,10 +34,10 @@ namespace TimeSheets.Controllers
             return Ok(employees);
         }
 
-        [HttpPut("change/{id}")]
-        public IActionResult Update([FromBody] Employee employee, [FromRoute] int id)
+        [HttpPut("change")]
+        public IActionResult Update([FromBody] Employee employee)
         {
-            var employees = _repository.ChangeObjects(employee, id);
+            var employees = _repository.ChangeObjects(employee);
             return Ok(employees);
         }
 

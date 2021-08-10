@@ -12,9 +12,10 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ContractsRepository : IContractsRepository
     {
-        private readonly SortedDictionary<int, Contract> _contracts = new SortedDictionary<int, Contract>();
+        private readonly IList<Contract> _contracts = new List<Contract>();
         private readonly IEmployeesRepository _repositoryEmployees;
         private readonly IClientsRepository _repositoryClients;
+        public IList<ContractDto> ContractDtos { get; set; } = new List<ContractDto>();
 
         public ContractsRepository(IEmployeesRepository repositoryEmployees, IClientsRepository repositoryClients)
         {
@@ -22,20 +23,20 @@ namespace TimeSheets.DAL.Repositories
             _repositoryClients = repositoryClients;
         }
 
-        public SortedDictionary<int, Contract> AddObjects(Contract contract, int id)
+        public IEnumerable<Contract> AddObjects(Contract contract)
         {
             try
             {
-                var client = _repositoryClients.GetAllObjects()[contract.IdClient];
+                var client = _repositoryClients.GetAllObjects().SingleOrDefault(c => c.Id == contract.IdClient);
 
-                var employees = new SortedDictionary<int, Employee>();
+                var employees = new List<Employee>();
 
                 foreach (var idEmpl in contract.IdEmployee)
                 {
-                    employees.Add(idEmpl, _repositoryEmployees.GetAllObjects()[idEmpl]);
+                    employees.Add(_repositoryEmployees.GetAllObjects().SingleOrDefault(e => e.Id == idEmpl));
                 }
 
-                _contracts.Add(id, new Contract
+                _contracts.Add(new Contract
                 {
                     NumberContract = contract.NumberContract,
                     Client = client,
@@ -44,6 +45,19 @@ namespace TimeSheets.DAL.Repositories
                     QuantityJob = contract.QuantityJob,
                     Price = contract.Price,
                 });
+
+                foreach (var cont in _contracts)
+                {
+                    ContractDtos.Add(new ContractDto
+                    {
+                        NumberContract = cont.NumberContract,
+                        Client = cont.Client,
+                        Employees = cont.Employees,
+                        TypeJob = cont.TypeJob,
+                        QuantityJob = cont.QuantityJob,
+                        Price = cont.Price
+                    });
+                }
             }
             catch (Exception e)
             {
@@ -53,19 +67,48 @@ namespace TimeSheets.DAL.Repositories
             return _contracts;
         }
 
-        public SortedDictionary<int, Contract> GetAllObjects()
+        public IEnumerable<Contract> GetAllObjects()
         {
-            throw new NotImplementedException();
+            return default;
         }
 
-        public SortedDictionary<int, Contract> ChangeObjects(Contract obj, int parameter)
+        public IEnumerable<Contract> ChangeObjects(Contract contract)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _contracts.Count; i++)
+            {
+                if (_contracts[i].Id == contract.Id)
+                {
+                    _contracts[i] = contract;
+                }
+            }
+
+            foreach (var cont in _contracts)
+            {
+                ContractDtos.Add(new ContractDto
+                {
+                    NumberContract = cont.NumberContract,
+                    Client = cont.Client,
+                    Employees = cont.Employees,
+                    TypeJob = cont.TypeJob,
+                    QuantityJob = cont.QuantityJob,
+                    Price = cont.Price
+                });
+            }
+
+            return default;
         }
 
-        public SortedDictionary<int, Contract> DeleteObjects(int parameter)
+        public IEnumerable<Contract> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < _contracts.Count; i++)
+            {
+                if (id == _contracts[i].Id)
+                {
+                    _contracts.RemoveAt(i);
+                    ContractDtos.RemoveAt(i);
+                }
+            }
+            return default;
         }
     }
 }

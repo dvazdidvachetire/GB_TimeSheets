@@ -9,6 +9,7 @@ namespace TimeSheets.DAL.Models
 {
     public class Contract
     {
+        public int Id { get; set; }
         public int NumberContract { get; set; }
         public int[] IdEmployee { get; set; }
         public int IdClient { get; set; }
@@ -17,7 +18,7 @@ namespace TimeSheets.DAL.Models
         public int QuantityJob { get; set; }
 
         [JsonIgnore]
-        public SortedDictionary<int, Employee> Employees { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
         [JsonIgnore]
         public Client Client { get; set; }
     }

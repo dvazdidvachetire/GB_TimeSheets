@@ -8,9 +8,9 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IRepository<T, in TP>
     {
-        SortedDictionary<int, T> AddObjects(T objects, TP parameter);
-        SortedDictionary<int, T> GetAllObjects();
-        SortedDictionary<int, T> ChangeObjects(T obj, TP parameter);
-        SortedDictionary<int, T> DeleteObjects(TP parameter);
+        IEnumerable<T> AddObjects(T objects);
+        IEnumerable<T> GetAllObjects();
+        IEnumerable<T> ChangeObjects(T obj);
+        IEnumerable<T> DeleteObjects(TP parameter);
     }
 }
