@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Models;
 
-namespace TimeSheets.DAL.Models
+namespace TimeSheets.Responses.DTO
 {
-    public class Invoice
+    public class InvoiceDto
     {
         public int Id { get; set; }
         public int NumberInvoice { get; set; }
-        public int NumberContract { get; set; }
+        public ContractDto Contracts { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

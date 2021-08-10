@@ -28,6 +28,13 @@ namespace TimeSheets.Controllers
             return Ok(contracts);
         }
 
+        [HttpGet("contract/{number}")]
+        public IActionResult ReadOne([FromRoute] int number)
+        {
+            var contract = _repository.GetContract(number);
+            return Ok(contract);
+        }
+
         [HttpGet("contracts")]
         public IActionResult Read()
         {

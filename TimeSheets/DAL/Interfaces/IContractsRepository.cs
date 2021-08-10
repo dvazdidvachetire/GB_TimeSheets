@@ -11,6 +11,7 @@ namespace TimeSheets.DAL.Interfaces
     public interface IContractsRepository
     {
         IEnumerable<ContractDto> AddContracts(Contract contract);
+        ContractDto GetContract(int id);
         IEnumerable<ContractDto> GetAllContracts();
         IEnumerable<ContractDto> DeleteContracts(int id);
     }

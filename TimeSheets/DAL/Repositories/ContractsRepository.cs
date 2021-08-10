@@ -55,6 +55,12 @@ namespace TimeSheets.DAL.Repositories
             return _contracts;
         }
 
+        public ContractDto GetContract(int number)
+        {
+            var contract = GetAllContracts().SingleOrDefault(c => c.NumberContract == number);
+            return contract;
+        }
+
         public IEnumerable<ContractDto> GetAllContracts()
         {
             return _contracts;

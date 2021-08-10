@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
+using TimeSheets.DAL.Models;
 
 namespace TimeSheets.Controllers
 {
@@ -11,16 +13,39 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class InvoiceController : ControllerBase
     {
-        [HttpGet("invoice")]
+        private readonly IInvoicesRepository _repository;
+
+        public InvoiceController(IInvoicesRepository repository)
+        {
+            _repository = repository;
+        }
+
+        [HttpPost("create")]
+        public IActionResult Create([FromBody] Invoice invoice)
+        {
+            var invoices = _repository.CreateInvoice(invoice);
+            return Ok(invoices);
+        }
+
+        [HttpGet("invoice/{number}")]
         public IActionResult Read([FromRoute] int number)
         {
-            return Ok();
+            var invoice = _repository.GetInvoice(number);
+            return Ok(invoice);
         }
 
         [HttpGet("invoices")]
         public IActionResult ReadAll()
         {
-            return Ok();
+            var invoices = _repository.GetAllInvoices();
+            return Ok(invoices);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var invoices = _repository.DeleteInvoice(id);
+            return Ok(invoices);
         }
     }
 }
