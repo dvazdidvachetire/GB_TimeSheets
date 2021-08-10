@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,15 @@ namespace TimeSheets.DAL.Repositories
 
         public SortedDictionary<int, Client> AddObjects(Client client, int id)
         {
-            _clients.Add(id, client);
+            try
+            {
+                _clients.Add(id, client);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+            }
+            
             return _clients;
         }
 

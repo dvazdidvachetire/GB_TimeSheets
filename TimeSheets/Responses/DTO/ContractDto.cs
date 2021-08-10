@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Models;
 
-namespace TimeSheets.DAL.Models
+namespace TimeSheets.Responses.DTO
 {
-    public class Contract
+    public class ContractDto
     {
         public int NumberContract { get; set; }
-        public int[] IdEmployee { get; set; }
-        public int IdClient { get; set; }
-        public decimal Price { get; set; }
+        public Client Client { get; set; }
         public string TypeJob { get; set; }
         public int QuantityJob { get; set; }
-
-        [JsonIgnore]
+        public decimal Price { get; set; }
         public SortedDictionary<int, Employee> Employees { get; set; }
-        [JsonIgnore]
-        public Client Client { get; set; }
     }
 }
