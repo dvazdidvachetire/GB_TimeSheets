@@ -8,8 +8,10 @@ using TimeSheets.Responses.DTO;
 
 namespace TimeSheets.DAL.Interfaces
 {
-    public interface IContractsRepository : IRepository<Contract, int>
+    public interface IContractsRepository
     {
-        public IList<ContractDto> ContractDtos { get; }
+        IEnumerable<ContractDto> AddContracts(Contract contract);
+        IEnumerable<ContractDto> GetAllContracts();
+        IEnumerable<ContractDto> DeleteContracts(int id);
     }
 }

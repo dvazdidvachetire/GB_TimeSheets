@@ -12,10 +12,9 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ContractsRepository : IContractsRepository
     {
-        private readonly IList<Contract> _contracts = new List<Contract>();
+        private readonly IList<ContractDto> _contracts = new List<ContractDto>();
         private readonly IEmployeesRepository _repositoryEmployees;
         private readonly IClientsRepository _repositoryClients;
-        public IList<ContractDto> ContractDtos { get; set; } = new List<ContractDto>();
 
         public ContractsRepository(IEmployeesRepository repositoryEmployees, IClientsRepository repositoryClients)
         {
@@ -23,7 +22,7 @@ namespace TimeSheets.DAL.Repositories
             _repositoryClients = repositoryClients;
         }
 
-        public IEnumerable<Contract> AddObjects(Contract contract)
+        public IEnumerable<ContractDto> AddContracts(Contract contract)
         {
             try
             {
@@ -36,28 +35,17 @@ namespace TimeSheets.DAL.Repositories
                     employees.Add(_repositoryEmployees.GetAllObjects().SingleOrDefault(e => e.Id == idEmpl));
                 }
 
-                _contracts.Add(new Contract
+                _contracts.Add(new ContractDto
                 {
+                    Id = contract.Id,
                     NumberContract = contract.NumberContract,
                     Client = client,
                     Employees = employees,
                     TypeJob = contract.TypeJob,
                     QuantityJob = contract.QuantityJob,
-                    Price = contract.Price,
+                    Price = contract.Price
                 });
-
-                foreach (var cont in _contracts)
-                {
-                    ContractDtos.Add(new ContractDto
-                    {
-                        NumberContract = cont.NumberContract,
-                        Client = cont.Client,
-                        Employees = cont.Employees,
-                        TypeJob = cont.TypeJob,
-                        QuantityJob = cont.QuantityJob,
-                        Price = cont.Price
-                    });
-                }
+                
             }
             catch (Exception e)
             {
@@ -67,48 +55,22 @@ namespace TimeSheets.DAL.Repositories
             return _contracts;
         }
 
-        public IEnumerable<Contract> GetAllObjects()
+        public IEnumerable<ContractDto> GetAllContracts()
         {
-            return default;
+            return _contracts;
         }
 
-        public IEnumerable<Contract> ChangeObjects(Contract contract)
-        {
-            for (int i = 0; i < _contracts.Count; i++)
-            {
-                if (_contracts[i].Id == contract.Id)
-                {
-                    _contracts[i] = contract;
-                }
-            }
-
-            foreach (var cont in _contracts)
-            {
-                ContractDtos.Add(new ContractDto
-                {
-                    NumberContract = cont.NumberContract,
-                    Client = cont.Client,
-                    Employees = cont.Employees,
-                    TypeJob = cont.TypeJob,
-                    QuantityJob = cont.QuantityJob,
-                    Price = cont.Price
-                });
-            }
-
-            return default;
-        }
-
-        public IEnumerable<Contract> DeleteObjects(int id)
+        public IEnumerable<ContractDto> DeleteContracts(int id)
         {
             for (int i = 0; i < _contracts.Count; i++)
             {
                 if (id == _contracts[i].Id)
                 {
                     _contracts.RemoveAt(i);
-                    ContractDtos.RemoveAt(i);
                 }
             }
-            return default;
+
+            return _contracts;
         }
     }
 }

@@ -24,23 +24,22 @@ namespace TimeSheets.Controllers
         [HttpPost("contract")]
         public IActionResult Create([FromBody] Contract contract)
         {
-            var contracts = _repository.AddObjects(contract);
-            var newContracts = _repository.ContractDtos;
-
-            return Ok(newContracts);
+            var contracts = _repository.AddContracts(contract);
+            return Ok(contracts);
         }
 
         [HttpGet("contracts")]
         public IActionResult Read()
         {
-            return Ok(_repository.ContractDtos);
+            var contracts = _repository.GetAllContracts();
+            return Ok(contracts);
         }
 
         [HttpDelete("delete/{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            _repository.DeleteObjects(id);
-            return Ok(_repository.ContractDtos);
+            var contracts = _repository.DeleteContracts(id);
+            return Ok(contracts);
         }
     }
 }
