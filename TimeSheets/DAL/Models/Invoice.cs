@@ -8,8 +8,8 @@ namespace TimeSheets.DAL.Models
 {
     public class Invoice
     {
-        public decimal Price { get; set; }
-        public List<Contract> Contracts { get; set; }
-        public int Number { get; set; }
+        public int NumberInvoice { get; set; }
+        public SortedDictionary<int, Contract> Contracts { get; set; }
+        public decimal Total { get; set; }
     }
 }

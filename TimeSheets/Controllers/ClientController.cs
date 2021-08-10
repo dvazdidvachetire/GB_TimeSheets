@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 
 namespace TimeSheets.Controllers
@@ -12,28 +13,39 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        [HttpPost("client")]
-        public IActionResult Create([FromBody] Client client)
+        private readonly IClientsRepository _repository;
+
+        public ClientController(IClientsRepository repository)
         {
-            return Ok();
+            _repository = repository;
+        }
+
+        [HttpPost("client/{id}")]
+        public IActionResult Create([FromBody] Client client, [FromRoute] int id)
+        {
+            var clients = _repository.AddObjects(client, id);
+            return Ok(client);
         }
 
         [HttpGet("clients")]
         public IActionResult Read()
         {
-            return Ok();
+            var clients = _repository.GetAllObjects();
+            return Ok(clients);
         }
 
-        [HttpPut("change")]
-        public IActionResult Update([FromBody] Client client)
+        [HttpPut("change/{id}")]
+        public IActionResult Update([FromBody] Client client, [FromRoute] int id)
         {
-            return Ok();
+            var clients = _repository.ChangeObjects(client, id);
+            return Ok(clients);
         }
 
-        [HttpDelete("delete")]
-        public IActionResult Delete([FromRoute] string name)
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            return Ok();
+            var clients = _repository.DeleteObjects(id);
+            return Ok(clients);
         }
     }
 }

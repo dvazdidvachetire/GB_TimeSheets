@@ -10,24 +10,29 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ClientsRepository : IClientsRepository
     {
-        public SortedDictionary<int, Client> AddObjects(Client objects, int parameter)
+        private SortedDictionary<int, Client> _clients = new SortedDictionary<int, Client>();
+
+        public SortedDictionary<int, Client> AddObjects(Client client, int id)
         {
-            throw new NotImplementedException();
+            _clients.Add(id, client);
+            return _clients;
         }
 
         public SortedDictionary<int, Client> GetAllObjects()
         {
-            throw new NotImplementedException();
+            return _clients;
         }
 
-        public SortedDictionary<int, Client> ChangeObjects(Client obj, int parameter)
+        public SortedDictionary<int, Client> ChangeObjects(Client client, int id)
         {
-            throw new NotImplementedException();
+            _clients[id] = client;
+            return _clients;
         }
 
-        public SortedDictionary<int, Client> DeleteObjects(int parameter)
+        public SortedDictionary<int, Client> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            _clients.Remove(id);
+            return _clients;
         }
     }
 }

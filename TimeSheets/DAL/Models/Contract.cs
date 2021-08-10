@@ -8,8 +8,11 @@ namespace TimeSheets.DAL.Models
 {
     public class Contract
     {
-        public int Number { get; set; }
-        public List<Employee> Employees { get; set; }
-        public List<Client> Clients { get; set; }
+        public int NumberContract { get; set; }
+        public int IdEmployee { get; set; }
+        public int IdClient { get; set; }
+        public decimal Price { get; set; }
+        public string TypeJob { get; set; }
+        public int QuantityJob { get; set; }
     }
 }
