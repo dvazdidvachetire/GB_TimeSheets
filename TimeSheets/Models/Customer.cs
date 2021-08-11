@@ -8,6 +8,7 @@ namespace TimeSheets.Models
 {
     public class Customer
     {
-        
+        public int Id { get; set; }
+        public IEnumerable<Contract> Contracts { get; set; }
     }
 }

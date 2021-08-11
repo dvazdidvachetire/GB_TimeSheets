@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TimeSheets.Models
 {
@@ -11,5 +10,8 @@ namespace TimeSheets.Models
         public int Id { get; set; }
         public int ContractId { get; set; }
         public DateTimeOffset Date { get; set; }
+        public IEnumerable<Task> Tasks { get; set; }
+
+        public decimal Cost() => Tasks.Select(s => s.Amount).Sum();
     }
 }
