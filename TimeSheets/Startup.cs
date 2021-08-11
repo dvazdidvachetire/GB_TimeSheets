@@ -28,6 +28,8 @@ namespace TimeSheets
         {
 
             services.AddControllers();
+            services.AddSingleton<Repositories>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TimeSheets", Version = "v1" });

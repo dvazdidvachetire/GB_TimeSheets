@@ -10,5 +10,7 @@ namespace TimeSheets.Models
     {
         public int Id { get; set; }
         public decimal Amount { get; set; }
+        public decimal Discount { get; set; }
+        public TimeSheet TimeSheet { get; set; }
     }
 }

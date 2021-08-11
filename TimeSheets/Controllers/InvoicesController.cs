@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace TimeSheets.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/invoice")]
     [ApiController]
-    public class InvoiceController : ControllerBase
+    public class InvoicesController : ControllerBase
     {
+
     }
 }
