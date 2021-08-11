@@ -32,7 +32,7 @@ namespace TimeSheets
             services.AddControllers();
 
             services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
-            services.AddSingleton<IClientsRepository, ClientsRepository>();
+            services.AddSingleton<ICustomersRepository, CutomersRepository>();
             services.AddSingleton<IContractsRepository, ContractsRepository>();
             services.AddSingleton<IInvoicesRepository, InvoicesRepository>();
 

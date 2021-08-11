@@ -20,6 +20,6 @@ namespace TimeSheets.DAL.Models
         [JsonIgnore]
         public IEnumerable<Employee> Employees { get; set; }
         [JsonIgnore]
-        public Client Client { get; set; }
+        public Customer Client { get; set; }
     }
 }

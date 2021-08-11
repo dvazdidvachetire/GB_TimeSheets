@@ -9,11 +9,11 @@ using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class ClientsRepository : IClientsRepository
+    public class CutomersRepository : ICustomersRepository
     {
-        private IList<Client> _clients = new List<Client>();
+        private IList<Customer> _clients = new List<Customer>();
 
-        public IEnumerable<Client> AddObjects(Client client)
+        public IEnumerable<Customer> AddObjects(Customer client)
         {
             try
             {
@@ -27,12 +27,12 @@ namespace TimeSheets.DAL.Repositories
             return _clients;
         }
 
-        public IEnumerable<Client> GetAllObjects()
+        public IEnumerable<Customer> GetAllObjects()
         {
             return _clients;
         }
 
-        public IEnumerable<Client> ChangeObjects(Client client)
+        public IEnumerable<Customer> ChangeObjects(Customer client)
         {
             for (int i = 0; i < _clients.Count; i++)
             {
@@ -45,7 +45,7 @@ namespace TimeSheets.DAL.Repositories
             return _clients;
         }
 
-        public IEnumerable<Client> DeleteObjects(int id)
+        public IEnumerable<Customer> DeleteObjects(int id)
         {
             for (int i = 0; i < _clients.Count; i++)
             {

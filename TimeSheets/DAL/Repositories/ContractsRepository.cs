@@ -14,9 +14,9 @@ namespace TimeSheets.DAL.Repositories
     {
         private readonly IList<ContractDto> _contracts = new List<ContractDto>();
         private readonly IEmployeesRepository _repositoryEmployees;
-        private readonly IClientsRepository _repositoryClients;
+        private readonly ICustomersRepository _repositoryClients;
 
-        public ContractsRepository(IEmployeesRepository repositoryEmployees, IClientsRepository repositoryClients)
+        public ContractsRepository(IEmployeesRepository repositoryEmployees, ICustomersRepository repositoryClients)
         {
             _repositoryEmployees = repositoryEmployees;
             _repositoryClients = repositoryClients;

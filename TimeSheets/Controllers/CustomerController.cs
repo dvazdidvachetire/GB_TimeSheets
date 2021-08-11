@@ -11,17 +11,17 @@ namespace TimeSheets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class CustomerController : ControllerBase
     {
-        private readonly IClientsRepository _repository;
+        private readonly ICustomersRepository _repository;
 
-        public ClientController(IClientsRepository repository)
+        public CustomerController(ICustomersRepository repository)
         {
             _repository = repository;
         }
 
         [HttpPost("client")]
-        public IActionResult Create([FromBody] Client client)
+        public IActionResult Create([FromBody] Customer client)
         {
             var clients = _repository.AddObjects(client);
             return Ok(client);
@@ -35,7 +35,7 @@ namespace TimeSheets.Controllers
         }
 
         [HttpPut("change")]
-        public IActionResult Update([FromBody] Client client)
+        public IActionResult Update([FromBody] Customer client)
         {
             var clients = _repository.ChangeObjects(client);
             return Ok(clients);

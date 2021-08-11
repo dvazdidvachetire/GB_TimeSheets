@@ -11,7 +11,7 @@ namespace TimeSheets.Responses.DTO
     {
         public int Id { get; set; }
         public int NumberContract { get; set; }
-        public Client Client { get; set; }
+        public Customer Client { get; set; }
         public string TypeJob { get; set; }
         public int QuantityJob { get; set; }
         public decimal Price { get; set; }
