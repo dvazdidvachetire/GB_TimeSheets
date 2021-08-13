@@ -23,28 +23,7 @@ namespace TimeSheets.Controllers
         public IActionResult Create([FromBody] Customer customer)
         {
             _repositories.Customers.Add(customer);
-            return Ok();
-        }
-
-        [HttpPost("{id}/contract")]
-        public IActionResult CreateContract([FromBody] Contract contract, [FromRoute] int id)
-        {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            customer?.Contracts.Add(contract);
-            return Ok();
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetCustomerById([FromRoute] int id)
-        {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            return Ok(customer);
-        }
-
-        [HttpGet()]
-        public IActionResult GetAllCustomer()
-        {
-            return Ok(_repositories.Customers);
+            return Ok("Регистрация прошла успешно!");
         }
 
         [HttpGet("{id}/contract/{idContract}")]
@@ -62,21 +41,12 @@ namespace TimeSheets.Controllers
             return Ok(customer?.Contracts);
         }
 
-        [HttpGet("{id}/contract/{idContract}/invoices{idInvoice}")]
-        public IActionResult GetInvoice([FromRoute] int id, [FromRoute] int idContract, [FromRoute] int idInvoice)
+        [HttpGet("{id}/invoice/{idInvoice}")]
+        public IActionResult GetInvoice([FromRoute] int id, [FromRoute] int idInvoice)
         {
             var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            var contract = customer?.Contracts.SingleOrDefault(c => c.Id == idContract);
-            var invoice = contract?.Invoices.SingleOrDefault(i => i.Id == idInvoice);
+            var invoice = customer?.Invoices.SingleOrDefault(i => i.Id == idInvoice);
             return Ok(invoice);
-        }
-
-        [HttpGet("{id}/contract/{idContract}/invoices")]
-        public IActionResult GetInvoices([FromRoute] int id, [FromRoute] int idContract)
-        {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            var contract = customer?.Contracts.SingleOrDefault(c => c.Id == idContract);
-            return Ok(contract?.Invoices);
         }
 
         [HttpGet("{id}/invoices")]
