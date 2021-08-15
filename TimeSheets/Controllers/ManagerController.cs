@@ -19,6 +19,11 @@ namespace TimeSheets.Controllers
             _repositories = repositories;
         }
 
+        /// <summary>
+        /// Создает задачи
+        /// </summary>
+        /// <param name="task">Задача</param>
+        /// <returns>Список задач</returns>
         [HttpPost("task")]
         public IActionResult CreateTask([FromBody] Task task)
         {
@@ -26,6 +31,11 @@ namespace TimeSheets.Controllers
             return Ok(_repositories.Tasks);
         }
 
+        /// <summary>
+        /// Создает контракты
+        /// </summary>
+        /// <param name="contract">Контракт</param>
+        /// <returns>Список контрактов</returns>
         [HttpPost("contract")]
         public IActionResult CreateContract([FromBody] Contract contract)
         {
@@ -44,6 +54,11 @@ namespace TimeSheets.Controllers
             return Ok(_repositories.Contracts);
         }
 
+        /// <summary>
+        /// Формирует счет
+        /// </summary>
+        /// <param name="invoice">Счет</param>
+        /// <returns>Счет</returns>
         [HttpPost("invoice")]
         public IActionResult CreateInvoice([FromBody] Invoice invoice)
         {
@@ -65,6 +80,11 @@ namespace TimeSheets.Controllers
             return Ok(invoiceDto);
         }
 
+        /// <summary>
+        /// Возвращает контракты конкретного покупателя
+        /// </summary>
+        /// <param name="id">ид покупателя</param>
+        /// <returns>Список контрактов конкретного покупателя</returns>
         [HttpGet("{id}/customer_contracts")]
         public IActionResult GetContractById([FromRoute] int id)
         {
@@ -72,6 +92,11 @@ namespace TimeSheets.Controllers
             return Ok(contracts);
         }
 
+        /// <summary>
+        /// Возвращает счета конкретного покупателя
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Список счетов конкретного покупателя</returns>
         [HttpGet("{id}/customer_invoices")]
         public IActionResult GetInvoicesById([FromRoute] int id)
         {
@@ -79,12 +104,20 @@ namespace TimeSheets.Controllers
             return Ok(invoices);
         }
 
+        /// <summary>
+        /// Возвращает все контракты
+        /// </summary>
+        /// <returns>Список контрактов</returns>
         [HttpGet("contracts")]
         public IActionResult GetAllContracts()
         {
             return Ok(_repositories.Contracts);
         }
 
+        /// <summary>
+        /// Возвращает все счета
+        /// </summary>
+        /// <returns>Список счетов</returns>
         [HttpGet("exposed_invoices")]
         public IActionResult GetAllInvoices()
         {

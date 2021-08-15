@@ -20,6 +20,11 @@ namespace TimeSheets.Controllers
             _repositories = repositories;
         }
 
+        /// <summary>
+        /// Создает нового сотрудника
+        /// </summary>
+        /// <param name="employee">Сотрудник</param>
+        /// <returns>Строка об успешной регистрации</returns>
         [HttpPost("register")]
         public IActionResult Create([FromBody] Employee employee)
         {
@@ -27,6 +32,12 @@ namespace TimeSheets.Controllers
             return Ok("Регистрация прошла успешно!");
         }
 
+        /// <summary>
+        /// Получает конкретную сделанную задачу конкретного сотрудника
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <param name="idT">ид задачи</param>
+        /// <returns>Задача</returns>
         [HttpGet("{id}/completed_task/{idT}")]
         public IActionResult GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
         {
@@ -35,6 +46,11 @@ namespace TimeSheets.Controllers
             return Ok(task);
         }
 
+        /// <summary>
+        /// Возвращает список сделанных задач конкретного сотрудника
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <returns>Список задач</returns>
         [HttpGet("{id}/completed_tasks")]
         public IActionResult GetEmployeeTasks([FromRoute] int id)
         {
@@ -42,6 +58,11 @@ namespace TimeSheets.Controllers
             return Ok(tasks);
         }
 
+        /// <summary>
+        /// Возвращает конкретную задачу
+        /// </summary>
+        /// <param name="id">ид задачи</param>
+        /// <returns>Задача</returns>
         [HttpGet("task/{id}")]
         public IActionResult GetTask([FromRoute] int id)
         {
@@ -49,12 +70,21 @@ namespace TimeSheets.Controllers
             return Ok(task);
         }
 
+        /// <summary>
+        /// Возвращает список всех задач
+        /// </summary>
+        /// <returns>Список задач</returns>
         [HttpGet("tasks")]
         public IActionResult GetAllTasks()
         {
             return Ok(_repositories.Tasks);
         }
 
+        /// <summary>
+        /// Возвращает профиль сотрудника
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <returns>Профиль сотрудника</returns>
         [HttpGet("{id}/profile")]
         public IActionResult GetProfile([FromRoute] int id)
         {
@@ -62,6 +92,12 @@ namespace TimeSheets.Controllers
             return Ok(employee);
         }
 
+        /// <summary>
+        /// Дает возможность сотруднику изменить табель задачи 
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <param name="timeSheet">табель</param>
+        /// <returns>Измененная задача</returns>
         [HttpPut("task/{id}/timesheet")]
         public IActionResult CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
@@ -82,6 +118,12 @@ namespace TimeSheets.Controllers
             return Ok(taskDto);
         }
 
+        /// <summary>
+        /// Дает возможность сотруднику изменить его профиль
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <param name="employee">сотрудник</param>
+        /// <returns>Строка о успешном изменении профиля</returns>
         [HttpPut("{id}/edit_profile_employee")]
         public IActionResult EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
@@ -100,6 +142,11 @@ namespace TimeSheets.Controllers
             return Ok("Профиль успешно изменен!");
         }
 
+        /// <summary>
+        /// Удаляет профиль сотрудника
+        /// </summary>
+        /// <param name="id">ид сотрудника</param>
+        /// <returns>Срока об успешном удалении</returns>
         [HttpDelete("delete_profile_employee")]
         public IActionResult DeleteProfile([FromRoute] int id)
         {
