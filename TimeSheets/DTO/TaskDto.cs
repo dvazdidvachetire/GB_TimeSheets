@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TimeSheets.Models;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DTO
 {
-    public class Task
+    public class TaskDto
     {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
-        [JsonIgnore] public TimeSheet TimeSheet { get; set; }
+        public TimeSheet TimeSheet { get; set; }
     }
 }

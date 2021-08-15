@@ -11,10 +11,6 @@ namespace TimeSheets.Models
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        public DateTimeOffset FromTime { get; set; }
-        public DateTimeOffset ToTime { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<Invoice> Invoices { get; set; }
+        public int NumberContract { get; set; }
     }
 }

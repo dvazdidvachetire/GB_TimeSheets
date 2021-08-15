@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DTO;
 using TimeSheets.Models;
 
 namespace TimeSheets.Controllers
@@ -19,7 +20,7 @@ namespace TimeSheets.Controllers
             _repositories = repositories;
         }
 
-        [HttpPost()]
+        [HttpPost("register")]
         public IActionResult Create([FromBody] Customer customer)
         {
             _repositories.Customers.Add(customer);

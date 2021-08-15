@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TimeSheets.DTO;
 using TimeSheets.Models;
 
 namespace TimeSheets.Controllers
@@ -25,10 +26,34 @@ namespace TimeSheets.Controllers
             return Ok(_repositories.Tasks);
         }
 
-        [HttpPost("invoice")]
-        public IActionResult CreateInvoice()
+        [HttpPost("contract")]
+        public IActionResult CreateContract([FromBody] Contract contract)
         {
-            return Ok();
+            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == contract.CustomerId);
+            var tasks = _repositories.Tasks.Where(s => s.Id == customer?.Id);
+            var contractDto = new ContractDto
+            {
+                NumberContract = contract.NumberContract,
+                Customer = customer,
+                Tasks = tasks
+            };
+
+            _repositories.Contracts.Add(contractDto);
+
+            return Ok(_repositories.Contracts);
+        }
+
+        [HttpGet("contracts")]
+        public IActionResult GetAllContracts()
+        {
+            return Ok(_repositories.Contracts);
+        }
+
+        [HttpPost("invoice")]
+        public IActionResult CreateInvoice([FromBody] Invoice invoice)
+        {
+            _repositories.Invoices.Add(invoice);
+            return Ok(_repositories.Invoices);
         }
     }
 }
