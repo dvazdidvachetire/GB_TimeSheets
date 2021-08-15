@@ -30,7 +30,7 @@ namespace TimeSheets.Controllers
         public IActionResult CreateContract([FromBody] Contract contract)
         {
             var customer = _repositories.Customers.SingleOrDefault(c => c.Id == contract.CustomerId);
-            var tasks = _repositories.Tasks.Where(s => s.Id == customer?.Id);
+            var tasks = _repositories.Tasks.Where(t => t.CustomerId == customer?.Id);
             var contractDto = new ContractDto
             {
                 Id = contract.Id,
@@ -44,17 +44,11 @@ namespace TimeSheets.Controllers
             return Ok(_repositories.Contracts);
         }
 
-        [HttpGet("contracts")]
-        public IActionResult GetAllContracts()
-        {
-            return Ok(_repositories.Contracts);
-        }
-
         [HttpPost("invoice")]
         public IActionResult CreateInvoice([FromBody] Invoice invoice)
         {
             var customer = _repositories.Customers.SingleOrDefault(c => c.Id == invoice.CustomerId);
-            var tasks = _repositories.TaskDtos.Where(t => t.CustomerId == customer.Id);
+            var tasks = _repositories.TaskDtos.Where(t => t.CustomerId == customer.Id).ToList();
 
             var totalSum = tasks.Select(t => t.Amount).Sum();
 
@@ -71,6 +65,13 @@ namespace TimeSheets.Controllers
             return Ok(invoiceDto);
         }
 
+        [HttpGet("{id}/customer_contracts")]
+        public IActionResult GetContractById([FromRoute] int id)
+        {
+            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == id);
+            return Ok(contracts);
+        }
+
         [HttpGet("{id}/customer_invoices")]
         public IActionResult GetInvoicesById([FromRoute] int id)
         {
@@ -78,7 +79,13 @@ namespace TimeSheets.Controllers
             return Ok(invoices);
         }
 
-        [HttpGet("store_invoices")]
+        [HttpGet("contracts")]
+        public IActionResult GetAllContracts()
+        {
+            return Ok(_repositories.Contracts);
+        }
+
+        [HttpGet("exposed_invoices")]
         public IActionResult GetAllInvoices()
         {
             return Ok(_repositories.InvoiceDtos);

@@ -56,5 +56,37 @@ namespace TimeSheets.Controllers
             var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
             return Ok(invoices);
         }
+
+        [HttpGet("{id}/profile")]
+        public IActionResult GetProfile([FromRoute] int id)
+        {
+            var employee = _repositories.Customers.SingleOrDefault(e => e.Id == id);
+            return Ok(employee);
+        }
+
+        [HttpPut("{id}/edit_profile_customer")]
+        public IActionResult EditProfile([FromRoute] int id, [FromBody] Customer customer)
+        {
+            _repositories.Customers = _repositories.Customers.Select(c =>
+            {
+                if (c.Id == id)
+                {
+                    c = customer;
+                    return c;
+                }
+
+                return c;
+
+            }).ToList();
+
+            return Ok("Профиль успешно изменен!");
+        }
+
+        [HttpDelete("delete_profile_customer")]
+        public IActionResult DeleteProfile([FromRoute] int id)
+        {
+            _repositories.Customers.RemoveAt(id);
+            return Ok("Профиль успешно удален!");
+        }
     }
 }

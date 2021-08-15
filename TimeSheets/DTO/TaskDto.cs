@@ -10,6 +10,7 @@ namespace TimeSheets.DTO
 {
     public class TaskDto
     {
+        [JsonIgnore] public int Id { get; set; }
         [JsonIgnore] public int CustomerId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

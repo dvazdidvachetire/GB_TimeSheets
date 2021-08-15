@@ -9,6 +9,6 @@ namespace TimeSheets.Models
     public class Employee
     {
         public int Id { get; set; }
-        public decimal Rate{ get; set; }
+        public string FullName { get; set; }
     }
 }
