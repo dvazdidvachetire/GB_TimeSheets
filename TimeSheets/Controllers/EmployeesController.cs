@@ -27,26 +27,6 @@ namespace TimeSheets.Controllers
             return Ok("Регистрация прошла успешно!");
         }
 
-        [HttpPut("task/{id}/timesheet")]
-        public IActionResult CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
-        {
-            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
-            task.TimeSheet = timeSheet;
-
-            var taskDto = new TaskDto
-            {
-                CustomerId = task.CustomerId,
-                Title = task.Title,
-                Description = task.Description,
-                Amount = task.Amount,
-                TimeSheet = timeSheet
-            };
-
-            _repositories.TaskDtos.Add(taskDto);
-
-            return Ok(taskDto);
-        }
-
         [HttpGet("{id}/completed_task/{idT}")]
         public IActionResult GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
         {
@@ -80,6 +60,26 @@ namespace TimeSheets.Controllers
         {
             var employee = _repositories.Employees.SingleOrDefault(e => e.Id == id);
             return Ok(employee);
+        }
+
+        [HttpPut("task/{id}/timesheet")]
+        public IActionResult CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
+        {
+            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
+            task.TimeSheet = timeSheet;
+
+            var taskDto = new TaskDto
+            {
+                CustomerId = task.CustomerId,
+                Title = task.Title,
+                Description = task.Description,
+                Amount = task.Amount,
+                TimeSheet = timeSheet
+            };
+
+            _repositories.TaskDtos.Add(taskDto);
+
+            return Ok(taskDto);
         }
 
         [HttpPut("{id}/edit_profile_employee")]
