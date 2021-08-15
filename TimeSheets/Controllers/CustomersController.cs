@@ -27,34 +27,33 @@ namespace TimeSheets.Controllers
             return Ok("Регистрация прошла успешно!");
         }
 
-        [HttpGet("{id}/contract/{idContract}")]
-        public IActionResult GetContract([FromRoute] int id, [FromRoute] int idContract)
+        [HttpGet("{idC}/contract/{id}")]
+        public IActionResult GetContract([FromRoute] int idC, [FromRoute] int id)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            var contract = customer?.Contracts.SingleOrDefault(c => c.Id == idContract);
+            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == idC);
+            var contract = contracts.SingleOrDefault(c => c.Id == id);
             return Ok(contract);
         }
 
         [HttpGet("{id}/contracts")]
         public IActionResult GetContracts([FromRoute] int id)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            return Ok(customer?.Contracts);
+            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == id);
+            return Ok(contracts);
         }
 
-        [HttpGet("{id}/invoice/{idInvoice}")]
-        public IActionResult GetInvoice([FromRoute] int id, [FromRoute] int idInvoice)
+        [HttpGet("{idC}/invoice/{id}")]
+        public IActionResult GetInvoice([FromRoute] int idC, [FromRoute] int id)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            var invoice = customer?.Invoices.SingleOrDefault(i => i.Id == idInvoice);
+            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == idC);
+            var invoice = invoices.SingleOrDefault(i => i.Id == id);
             return Ok(invoice);
         }
 
         [HttpGet("{id}/invoices")]
-        public IActionResult GetInvoices([FromRoute] int id)
+        public IActionResult GetInvoicesById([FromRoute] int id)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == id);
-            var invoices = customer?.Invoices;
+            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
             return Ok(invoices);
         }
     }

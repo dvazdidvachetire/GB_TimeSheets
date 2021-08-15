@@ -8,10 +8,7 @@ namespace TimeSheets.Models
     public class Invoice
     {
         public int Id { get; set; }
-        public int ContractId { get; set; }
+        public int CustomerId { get; set; }
         public DateTimeOffset Date { get; set; }
-        public IList<Task> Tasks { get; set; }
-
-        public decimal Cost() => Tasks.Select(s => s.Amount).Sum();
     }
 }

@@ -9,11 +9,11 @@ using Task = TimeSheets.Models.Task;
 
 namespace TimeSheets.DTO
 {
-    public class ContractDto
+    public class InvoiceDto
     {
         [JsonIgnore] public int Id { get; set; }
-        public int NumberContract { get; set; }
         public Customer Customer { get; set; }
-        public IEnumerable<Task> Tasks { get; set; }
+        public IEnumerable<TaskDto> Tasks { get; set; }
+        public decimal TotalSum { get; set; }
     }
 }

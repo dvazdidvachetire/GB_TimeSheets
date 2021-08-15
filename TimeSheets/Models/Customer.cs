@@ -11,8 +11,5 @@ namespace TimeSheets.Models
     {
         public int Id { get; set; }
         public string FullName { get; set; }
-
-        [JsonIgnore] public IList<Contract> Contracts { get; set; }
-        [JsonIgnore] public IList<Invoice> Invoices { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace TimeSheets.Controllers
             var tasks = _repositories.Tasks.Where(s => s.Id == customer?.Id);
             var contractDto = new ContractDto
             {
+                Id = contract.Id,
                 NumberContract = contract.NumberContract,
                 Customer = customer,
                 Tasks = tasks
@@ -52,8 +53,35 @@ namespace TimeSheets.Controllers
         [HttpPost("invoice")]
         public IActionResult CreateInvoice([FromBody] Invoice invoice)
         {
-            _repositories.Invoices.Add(invoice);
-            return Ok(_repositories.Invoices);
+            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == invoice.CustomerId);
+            var tasks = _repositories.TaskDtos.Where(t => t.CustomerId == customer.Id);
+
+            var totalSum = tasks.Select(t => t.Amount).Sum();
+
+            var invoiceDto = new InvoiceDto
+            {
+                Id = invoice.Id,
+                Customer = customer,
+                Tasks = tasks,
+                TotalSum = totalSum
+            };
+
+            _repositories.InvoiceDtos.Add(invoiceDto);
+
+            return Ok(invoiceDto);
+        }
+
+        [HttpGet("{id}/customer_invoices")]
+        public IActionResult GetInvoicesById([FromRoute] int id)
+        {
+            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
+            return Ok(invoices);
+        }
+
+        [HttpGet("store_invoices")]
+        public IActionResult GetAllInvoices()
+        {
+            return Ok(_repositories.InvoiceDtos);
         }
     }
 }
