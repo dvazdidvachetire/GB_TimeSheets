@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-using TimeSheets.Models;
 
 namespace TimeSheets
 {

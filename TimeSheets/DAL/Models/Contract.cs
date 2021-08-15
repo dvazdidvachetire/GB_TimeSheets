@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Models
 {
     public class Contract
     {

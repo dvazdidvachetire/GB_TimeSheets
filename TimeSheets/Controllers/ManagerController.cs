@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TimeSheets.DTO;
-using TimeSheets.Models;
+using TimeSheets.DAL.Models;
 
 namespace TimeSheets.Controllers
 {

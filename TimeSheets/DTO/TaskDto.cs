@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using TimeSheets.Models;
+using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DTO
 {

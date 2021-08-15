@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using TimeSheets.Models;
-using Task = TimeSheets.Models.Task;
+using TimeSheets.DAL.Models;
+using Task = TimeSheets.DAL.Models.Task;
 
 namespace TimeSheets.DTO
 {

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Interfaces
 {
-    public class Employee
+    public interface ITasksRepository
     {
-        public int Id { get; set; }
-        public string FullName { get; set; }
+        
     }
 }
