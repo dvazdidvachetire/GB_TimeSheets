@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
+using TimeSheets.DAL.Repositories;
 using TimeSheets.DTO;
+using Task = System.Threading.Tasks.Task;
 
 namespace TimeSheets.Controllers
 {
@@ -13,23 +16,25 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly Repositories _repositories;
+        private readonly ICustomersRepository _repositories;
+        private readonly Repositories _repositoriesT;
 
-        public CustomersController(Repositories repositories)
+        public CustomersController(ICustomersRepository repositories, Repositories repositoriesT)
         {
             _repositories = repositories;
+            _repositoriesT = repositoriesT;
         }
 
         /// <summary>
         /// Добавляет нового покупателя
         /// </summary>
         /// <param name="customer">Покупатель</param>
-        /// <returns>Строка об успешноу регистрации</returns>
+        /// <returns>Строка об успешной регистрации</returns>
         [HttpPost("register")]
-        public IActionResult Create([FromBody] Customer customer)
+        public async Task<IActionResult> Create([FromBody] Customer customer)
         {
-            _repositories.Customers.Add(customer);
-            return Ok("Регистрация прошла успешно!");
+            await _repositories.CreateObjects(customer);
+            return await Task.Run(() => Ok("Регистрация прошла успешно!"));
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{idC}/contract/{id}")]
         public IActionResult GetContract([FromRoute] int idC, [FromRoute] int id)
         {
-            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == idC);
+            var contracts = _repositoriesT.Contracts.Where(c => c.Customer.Id == idC);
             var contract = contracts.SingleOrDefault(c => c.Id == id);
             return Ok(contract);
         }
@@ -54,7 +59,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/contracts")]
         public IActionResult GetContracts([FromRoute] int id)
         {
-            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == id);
+            var contracts = _repositoriesT.Contracts.Where(c => c.Customer.Id == id);
             return Ok(contracts);
         }
 
@@ -67,7 +72,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{idC}/invoice/{id}")]
         public IActionResult GetInvoice([FromRoute] int idC, [FromRoute] int id)
         {
-            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == idC);
+            var invoices = _repositoriesT.InvoiceDtos.Where(i => i.Customer.Id == idC);
             var invoice = invoices.SingleOrDefault(i => i.Id == id);
             return Ok(invoice);
         }
@@ -80,7 +85,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/invoices")]
         public IActionResult GetInvoicesById([FromRoute] int id)
         {
-            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
+            var invoices = _repositoriesT.InvoiceDtos.Where(i => i.Customer.Id == id);
             return Ok(invoices);
         }
 
@@ -92,7 +97,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/profile")]
         public IActionResult GetProfile([FromRoute] int id)
         {
-            var customer = _repositories.Customers.SingleOrDefault(с => с.Id == id);
+            var customer = _repositories.GetObject(id);
             return Ok(customer);
         }
 
@@ -103,21 +108,10 @@ namespace TimeSheets.Controllers
         /// <param name="customer">покупатель</param>
         /// <returns>Строка об успешном изменении</returns>
         [HttpPut("{id}/edit_profile_customer")]
-        public IActionResult EditProfile([FromRoute] int id, [FromBody] Customer customer)
+        public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Customer customer)
         {
-            _repositories.Customers = _repositories.Customers.Select(c =>
-            {
-                if (c.Id == id)
-                {
-                    c = customer;
-                    return c;
-                }
-
-                return c;
-
-            }).ToList();
-
-            return Ok("Профиль успешно изменен!");
+            await _repositories.UpdateObject(id, customer);
+            return await Task.Run(() => Ok("Профиль успешно изменен!"));
         }
 
         /// <summary>
@@ -126,10 +120,10 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид покупателя</param>
         /// <returns>Срока об успешном удалении</returns>
         [HttpDelete("delete_profile_customer")]
-        public IActionResult DeleteProfile([FromRoute] int id)
+        public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            _repositories.Customers.RemoveAt(id);
-            return Ok("Профиль успешно удален!");
+            await _repositories.DeleteObject(id);
+            return await Task.Run(() => Ok("Профиль успешно удален!"));
         }
     }
 }
