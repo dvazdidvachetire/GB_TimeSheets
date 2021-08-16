@@ -14,7 +14,6 @@ namespace TimeSheets
         public IList<Customer> Customers { get; set; } = new List<Customer>();
         public IList<ContractDto> Contracts { get; set; } = new List<ContractDto>();
         public IList<Invoice> Invoices { get; set; } = new List<Invoice>();
-        public IList<Employee> Employees { get; set; } = new List<Employee>();
         public IList<InvoiceDto> InvoiceDtos { get; set; } = new List<InvoiceDto>();
     }
 }

@@ -32,6 +32,7 @@ namespace TimeSheets
             services.AddControllers();
             services.AddSingleton<Repositories>();
             services.AddSingleton<ICustomersRepository, CustomersRepository>();
+            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
 
             services.AddSwaggerGen(c =>
             {

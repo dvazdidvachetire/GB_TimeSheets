@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
+using Task = System.Threading.Tasks.Task;
 
 namespace TimeSheets.Controllers
 {
@@ -14,9 +16,11 @@ namespace TimeSheets.Controllers
     public class EmployeesController : ControllerBase
     {
         private readonly Repositories _repositories;
+        private readonly IEmployeesRepository _employeesRepository;
 
-        public EmployeesController(Repositories repositories)
+        public EmployeesController(IEmployeesRepository employeesRepository, Repositories repositories)
         {
+            _employeesRepository = employeesRepository;
             _repositories = repositories;
         }
 
@@ -26,10 +30,10 @@ namespace TimeSheets.Controllers
         /// <param name="employee">Сотрудник</param>
         /// <returns>Строка об успешной регистрации</returns>
         [HttpPost("register")]
-        public IActionResult Create([FromBody] Employee employee)
+        public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            _repositories.Employees.Add(employee);
-            return Ok("Регистрация прошла успешно!");
+            await _employeesRepository.CreateObjects(employee);
+            return await Task.Run(() => Ok("Регистрация прошла успешно!"));
         }
 
         /// <summary>
@@ -86,10 +90,10 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид сотрудника</param>
         /// <returns>Профиль сотрудника</returns>
         [HttpGet("{id}/profile")]
-        public IActionResult GetProfile([FromRoute] int id)
+        public async Task<IActionResult> GetProfile([FromRoute] int id)
         {
-            var employee = _repositories.Employees.SingleOrDefault(e => e.Id == id);
-            return Ok(employee);
+            var employee = await _employeesRepository.GetObject(id);
+            return await Task.Run( () => Ok(employee));
         }
 
         /// <summary>
@@ -125,21 +129,10 @@ namespace TimeSheets.Controllers
         /// <param name="employee">сотрудник</param>
         /// <returns>Строка о успешном изменении профиля</returns>
         [HttpPut("{id}/edit_profile_employee")]
-        public IActionResult EditProfile([FromRoute] int id, [FromBody] Employee employee)
+        public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
-            _repositories.Employees = _repositories.Employees.Select(e =>
-            {
-                if (e.Id == id)
-                {
-                    e = employee;
-                    return e;
-                }
-
-                return e;
-
-            }).ToList();
-
-            return Ok("Профиль успешно изменен!");
+            await _employeesRepository.UpdateObject(id, employee);
+            return await Task.Run(() => Ok("Профиль успешно изменен!"));
         }
 
         /// <summary>
@@ -148,10 +141,10 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид сотрудника</param>
         /// <returns>Срока об успешном удалении</returns>
         [HttpDelete("delete_profile_employee")]
-        public IActionResult DeleteProfile([FromRoute] int id)
+        public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            _repositories.Employees.RemoveAt(id);
-            return Ok("Профиль успешно удален!");
+            await _employeesRepository.DeleteObject(id);
+            return await Task.Run(() => Ok("Профиль успешно удален!"));
         }
     }
 }
