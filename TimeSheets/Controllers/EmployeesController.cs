@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
+using TimeSheets.DAL.Repositories;
 using TimeSheets.DTO;
 using Task = System.Threading.Tasks.Task;
 
@@ -15,13 +16,11 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly Repositories _repositories;
         private readonly IEmployeesRepository _employeesRepository;
 
-        public EmployeesController(IEmployeesRepository employeesRepository, Repositories repositories)
+        public EmployeesController(IEmployeesRepository employeesRepository)
         {
             _employeesRepository = employeesRepository;
-            _repositories = repositories;
         }
 
         /// <summary>
@@ -43,11 +42,10 @@ namespace TimeSheets.Controllers
         /// <param name="idT">ид задачи</param>
         /// <returns>Задача</returns>
         [HttpGet("{id}/completed_task/{idT}")]
-        public IActionResult GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
+        public async Task<IActionResult> GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
         {
-            var tasks = _repositories.TaskDtos.Where(t => t.TimeSheet.EmployeeId == id);
-            var task = tasks.SingleOrDefault(t => t.Id == idT);
-            return Ok(task);
+            var task = await ((EmployeesRepository) _employeesRepository).GetEmployeeTask(id, idT);
+            return await Task.Run(() => Ok(task));
         }
 
         /// <summary>
@@ -56,9 +54,9 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид сотрудника</param>
         /// <returns>Список задач</returns>
         [HttpGet("{id}/completed_tasks")]
-        public IActionResult GetEmployeeTasks([FromRoute] int id)
+        public async Task<IActionResult> GetEmployeeTasks([FromRoute] int id)
         {
-            var tasks = _repositories.TaskDtos.Where(t => t.TimeSheet.EmployeeId == id);
+            var tasks = await ((EmployeesRepository) _employeesRepository).GetEmployeeTasks(id);
             return Ok(tasks);
         }
 
@@ -68,10 +66,10 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид задачи</param>
         /// <returns>Задача</returns>
         [HttpGet("task/{id}")]
-        public IActionResult GetTask([FromRoute] int id)
+        public async Task<IActionResult> GetTask([FromRoute] int id)
         {
-            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
-            return Ok(task);
+            var task = await ((EmployeesRepository)_employeesRepository).GeTask(id);
+            return await Task.Run(() => Ok(task));
         }
 
         /// <summary>
@@ -79,9 +77,10 @@ namespace TimeSheets.Controllers
         /// </summary>
         /// <returns>Список задач</returns>
         [HttpGet("tasks")]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllTasks()
         {
-            return Ok(_repositories.Tasks);
+            var tasks = await ((EmployeesRepository)_employeesRepository).GetAllTask();
+            return await Task.Run( () => Ok(tasks));
         }
 
         /// <summary>
@@ -103,22 +102,9 @@ namespace TimeSheets.Controllers
         /// <param name="timeSheet">табель</param>
         /// <returns>Измененная задача</returns>
         [HttpPut("task/{id}/timesheet")]
-        public IActionResult CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
+        public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
-            task.TimeSheet = timeSheet;
-
-            var taskDto = new TaskDto
-            {
-                CustomerId = task.CustomerId,
-                Title = task.Title,
-                Description = task.Description,
-                Amount = task.Amount,
-                TimeSheet = timeSheet
-            };
-
-            _repositories.TaskDtos.Add(taskDto);
-
+            var taskDto = await ((EmployeesRepository)_employeesRepository).CreateTimeSheet(id, timeSheet);
             return Ok(taskDto);
         }
 

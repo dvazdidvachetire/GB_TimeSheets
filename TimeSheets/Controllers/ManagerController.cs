@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DTO;
 using TimeSheets.DAL.Models;
+using TimeSheets.DAL.Repositories;
+using Task = TimeSheets.DAL.Models.Task;
 
 namespace TimeSheets.Controllers
 {
@@ -13,9 +17,11 @@ namespace TimeSheets.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly Repositories _repositories;
+        private readonly IManagerRepository _managerRepository;
 
-        public ManagerController(Repositories repositories)
+        public ManagerController(IManagerRepository managerRepository, Repositories repositories)
         {
+            _managerRepository = managerRepository;
             _repositories = repositories;
         }
 
@@ -25,10 +31,10 @@ namespace TimeSheets.Controllers
         /// <param name="task">Задача</param>
         /// <returns>Список задач</returns>
         [HttpPost("task")]
-        public IActionResult CreateTask([FromBody] Task task)
+        public async Task<IActionResult> CreateTask([FromBody] Task task)
         {
-            _repositories.Tasks.Add(task);
-            return Ok(_repositories.Tasks);
+            var tasks = await ((ManagersRepository)_managerRepository).CreateTask(task);
+            return await System.Threading.Tasks.Task.Run(() => Ok(tasks));
         }
 
         /// <summary>
