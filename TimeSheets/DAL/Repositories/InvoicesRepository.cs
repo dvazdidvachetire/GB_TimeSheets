@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class InvoicesRepository
+    public class InvoicesRepository : IInvoicesRepository
     {
-        
+
     }
 }

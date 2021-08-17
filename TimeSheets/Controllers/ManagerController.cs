@@ -33,8 +33,7 @@ namespace TimeSheets.Controllers
         [HttpPost("task")]
         public async Task<IActionResult> CreateTask([FromBody] Task task)
         {
-            var tasks = await ((ManagersRepository)_managerRepository).CreateTask(task);
-            return await System.Threading.Tasks.Task.Run(() => Ok(tasks));
+            return Ok(await _managerRepository.CreateTask(task));
         }
 
         /// <summary>
@@ -43,21 +42,9 @@ namespace TimeSheets.Controllers
         /// <param name="contract">Контракт</param>
         /// <returns>Список контрактов</returns>
         [HttpPost("contract")]
-        public IActionResult CreateContract([FromBody] Contract contract)
+        public async Task<IActionResult> CreateContract([FromBody] Contract contract)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == contract.CustomerId);
-            var tasks = _repositories.Tasks.Where(t => t.CustomerId == customer?.Id);
-            var contractDto = new ContractDto
-            {
-                Id = contract.Id,
-                NumberContract = contract.NumberContract,
-                Customer = customer,
-                Tasks = tasks
-            };
-
-            _repositories.Contracts.Add(contractDto);
-
-            return Ok(_repositories.Contracts);
+            return Ok(await _managerRepository.CreateContract(contract));
         }
 
         /// <summary>

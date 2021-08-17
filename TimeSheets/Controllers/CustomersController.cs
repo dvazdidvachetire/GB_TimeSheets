@@ -34,7 +34,7 @@ namespace TimeSheets.Controllers
         public async Task<IActionResult> Create([FromBody] Customer customer)
         {
             await _repositories.CreateObjects(customer);
-            return await Task.Run(() => Ok("Регистрация прошла успешно!"));
+            return Ok("Регистрация прошла успешно!");
         }
 
         /// <summary>

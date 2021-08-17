@@ -7,7 +7,9 @@ using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DAL.Interfaces
 {
-    public interface IManagerRepository : IRepository<Manager>
+    public interface IManagerRepository
     {
+        Task<IEnumerable<Contract>> CreateContract(Contract contract);
+        Task<IEnumerable<Models.Task>> CreateTask(Models.Task task);
     }
 }

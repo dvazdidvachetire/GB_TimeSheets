@@ -44,7 +44,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/completed_task/{idT}")]
         public async Task<IActionResult> GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
         {
-            var task = await ((EmployeesRepository) _employeesRepository).GetEmployeeTask(id, idT);
+            var task = await _employeesRepository.GetEmployeeTask(id, idT);
             return await Task.Run(() => Ok(task));
         }
 
@@ -56,7 +56,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/completed_tasks")]
         public async Task<IActionResult> GetEmployeeTasks([FromRoute] int id)
         {
-            var tasks = await ((EmployeesRepository) _employeesRepository).GetEmployeeTasks(id);
+            var tasks = await _employeesRepository.GetEmployeeTasks(id);
             return Ok(tasks);
         }
 
@@ -68,7 +68,7 @@ namespace TimeSheets.Controllers
         [HttpGet("task/{id}")]
         public async Task<IActionResult> GetTask([FromRoute] int id)
         {
-            var task = await ((EmployeesRepository)_employeesRepository).GeTask(id);
+            var task = await _employeesRepository.GetTask(id);
             return await Task.Run(() => Ok(task));
         }
 
@@ -79,7 +79,7 @@ namespace TimeSheets.Controllers
         [HttpGet("tasks")]
         public async Task<IActionResult> GetAllTasks()
         {
-            var tasks = await ((EmployeesRepository)_employeesRepository).GetAllTask();
+            var tasks = await _employeesRepository.GetAllTask();
             return await Task.Run( () => Ok(tasks));
         }
 
@@ -104,7 +104,7 @@ namespace TimeSheets.Controllers
         [HttpPut("task/{id}/timesheet")]
         public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var taskDto = await ((EmployeesRepository)_employeesRepository).CreateTimeSheet(id, timeSheet);
+            var taskDto = await _employeesRepository.CreateTimeSheet(id, timeSheet);
             return Ok(taskDto);
         }
 
