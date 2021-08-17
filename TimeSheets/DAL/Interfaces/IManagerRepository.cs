@@ -14,6 +14,6 @@ namespace TimeSheets.DAL.Interfaces
         Task<ContractDto> GetByIdContract(int id, int idC);
         Task<IEnumerable<ContractDto>> GetByIdContracts(int id);
         Task<IEnumerable<ContractDto>> GetAllContracts();
-        Task<IEnumerable<Models.Task>> CreateTask(Models.Task task);
+        Task<IEnumerable<Models.Job>> CreateTask(Models.Job task);
     }
 }

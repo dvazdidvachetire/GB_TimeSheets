@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Models;
-using Task = TimeSheets.DAL.Models.Task;
+using Task = TimeSheets.DAL.Models.Job;
 
 namespace TimeSheets.DTO
 {
@@ -13,7 +13,7 @@ namespace TimeSheets.DTO
     {
         [JsonIgnore] public int Id { get; set; }
         public Customer Customer { get; set; }
-        public IEnumerable<TaskDto> Tasks { get; set; }
+        public IEnumerable<JobDto> Tasks { get; set; }
         public decimal TotalSum { get; set; }
     }
 }

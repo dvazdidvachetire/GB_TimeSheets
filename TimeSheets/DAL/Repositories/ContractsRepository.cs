@@ -13,10 +13,10 @@ namespace TimeSheets.DAL.Repositories
     public class ContractsRepository : IContractsRepository
     {
         private IList<ContractDto> _contractsDto = new List<ContractDto>();
-        private readonly ITasksRepository _tasksRepository;
+        private readonly IJobRepository _tasksRepository;
         private readonly ICustomersRepository _customersRepository;
 
-        public ContractsRepository(ITasksRepository tasksRepository,
+        public ContractsRepository(IJobRepository tasksRepository,
             ICustomersRepository customersRepository)
         {
             _tasksRepository = tasksRepository;
@@ -36,15 +36,35 @@ namespace TimeSheets.DAL.Repositories
             return contractDto;
         }
 
-        public async Task<IEnumerable<ContractDto>> CreateContract(Contract contract)
+        public Task<IEnumerable<ContractDto>> CreateContract(Contract contract)
         {
-            await Task.Run(async () => _contractsDto.Add(await Map(contract)));
-            return _contractsDto;
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<ContractDto>> GetAllContracts()
         {
             return await Task.Run(() => _contractsDto);
+        }
+
+        public async Task<IEnumerable<Contract>> CreateObjects(Contract contract)
+        {
+            await Task.Run(async () => _contractsDto.Add(await Map(contract)));
+            return null;
+        }
+
+        public Task<IEnumerable<Contract>> GetObjects()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Contract>> UpdateObjects(int id, Contract contract)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Contract>> DeleteObjects(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

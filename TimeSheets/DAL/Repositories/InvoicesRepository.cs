@@ -15,9 +15,9 @@ namespace TimeSheets.DAL.Repositories
         private IList<Invoice> _invoices = new List<Invoice>();
         private IList<InvoiceDto> _invoicesDtos = new List<InvoiceDto>();
         private readonly ICustomersRepository _customersRepository;
-        private readonly ITasksRepository _tasksRepository;
+        private readonly IJobRepository _tasksRepository;
         public InvoicesRepository(ICustomersRepository customersRepository,
-            ITasksRepository tasksRepository)
+            IJobRepository tasksRepository)
         {
             _customersRepository = customersRepository;
             _tasksRepository = tasksRepository;

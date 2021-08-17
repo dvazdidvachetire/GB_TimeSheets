@@ -7,7 +7,7 @@ using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
 namespace TimeSheets.DAL.Interfaces
 {
-    public interface IContractsRepository
+    public interface IContractsRepository : IRepository<Contract>
     {
         Task<IEnumerable<ContractDto>> CreateContract(Contract contract);
         Task<IEnumerable<ContractDto>> GetAllContracts();

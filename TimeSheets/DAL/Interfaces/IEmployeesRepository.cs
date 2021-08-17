@@ -11,10 +11,10 @@ namespace TimeSheets.DAL.Interfaces
     public interface IEmployeesRepository : IRepository<Employee>
     {
         Task<Employee> GetByIdEmployee(int id);
-        Task<TaskDto> GetEmployeeTask(int id, int idT);
-        Task<IEnumerable<TaskDto>> GetEmployeeTasks(int id);
-        Task<Models.Task> GetTask(int id);
-        Task<IEnumerable<Models.Task>> GetAllTask();
-        Task<TaskDto> CreateTimeSheet(int id, TimeSheet timeSheet);
+        Task<JobDto> GetEmployeeTask(int id, int idT);
+        Task<IEnumerable<JobDto>> GetEmployeeTasks(int id);
+        Task<Models.Job> GetTask(int id);
+        Task<IEnumerable<Models.Job>> GetAllTask();
+        Task<JobDto> CreateTimeSheet(int id, TimeSheet timeSheet);
     }
 }

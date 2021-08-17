@@ -13,9 +13,9 @@ namespace TimeSheets.DAL.Repositories
     public class EmployeesRepository : IEmployeesRepository
     {
         private IList<Employee> _employees = new List<Employee>();
-        private readonly ITasksRepository _tasksRepository;
+        private readonly IJobRepository _tasksRepository;
 
-        public EmployeesRepository(ITasksRepository tasksRepository)
+        public EmployeesRepository(IJobRepository tasksRepository)
         {
             _tasksRepository = tasksRepository;
         }
@@ -84,7 +84,7 @@ namespace TimeSheets.DAL.Repositories
         /// <param name="id">ид сотрудника</param>
         /// <param name="idT">ид задачи</param>
         /// <returns>задача</returns>
-        public async Task<TaskDto> GetEmployeeTask(int id, int idT)
+        public async Task<JobDto> GetEmployeeTask(int id, int idT)
         {
             var tasks = await _tasksRepository.GetCompletedTasksById(id);
             var task = await Task.Run(() => tasks.SingleOrDefault(t => t.Id == idT));
@@ -96,7 +96,7 @@ namespace TimeSheets.DAL.Repositories
         /// </summary>
         /// <param name="id">ид сотрудника</param>
         /// <returns>список задач</returns>
-        public async Task<IEnumerable<TaskDto>> GetEmployeeTasks(int id)
+        public async Task<IEnumerable<JobDto>> GetEmployeeTasks(int id)
         {
             return await _tasksRepository.GetCompletedTasksById(id);
         }
@@ -106,7 +106,7 @@ namespace TimeSheets.DAL.Repositories
         /// </summary>
         /// <param name="id">ид задачи</param>
         /// <returns>задача</returns>
-        public async Task<Models.Task> GetTask(int id)
+        public async Task<Models.Job> GetTask(int id)
         {
             var tasks = await _tasksRepository.GetObjects();
             var task = await Task.Run(() => tasks.SingleOrDefault(t => t.Id == id));
@@ -117,7 +117,7 @@ namespace TimeSheets.DAL.Repositories
         /// Возвращает общий список задач, созданного менеджером
         /// </summary>
         /// <returns>список задач</returns>
-        public async Task<IEnumerable<Models.Task>> GetAllTask()
+        public async Task<IEnumerable<Models.Job>> GetAllTask()
         {
             return await _tasksRepository.GetObjects();
         }
@@ -128,7 +128,7 @@ namespace TimeSheets.DAL.Repositories
         /// <param name="id">ид задачи</param>
         /// <param name="timeSheet">табель</param>
         /// <returns>задача</returns>
-        public async Task<TaskDto> CreateTimeSheet(int id, TimeSheet timeSheet)
+        public async Task<JobDto> CreateTimeSheet(int id, TimeSheet timeSheet)
         {
             return await _tasksRepository.UpdateTask(id, timeSheet);
         }

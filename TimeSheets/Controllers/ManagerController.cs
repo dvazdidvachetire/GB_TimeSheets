@@ -8,7 +8,7 @@ using TimeSheets.DAL.Interfaces;
 using TimeSheets.DTO;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories;
-using Task = TimeSheets.DAL.Models.Task;
+using Job = TimeSheets.DAL.Models.Job;
 
 namespace TimeSheets.Controllers
 {
@@ -16,13 +16,11 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class ManagerController : ControllerBase
     {
-        private readonly Repositories _repositories;
         private readonly IManagerRepository _managerRepository;
 
-        public ManagerController(IManagerRepository managerRepository, Repositories repositories)
+        public ManagerController(IManagerRepository managerRepository)
         {
             _managerRepository = managerRepository;
-            _repositories = repositories;
         }
 
         /// <summary>
@@ -31,7 +29,7 @@ namespace TimeSheets.Controllers
         /// <param name="task">Задача</param>
         /// <returns>Список задач</returns>
         [HttpPost("task")]
-        public async Task<IActionResult> CreateTask([FromBody] Task task)
+        public async Task<IActionResult> CreateTask([FromBody] Job task)
         {
             return Ok(await _managerRepository.CreateTask(task));
         }
@@ -55,22 +53,7 @@ namespace TimeSheets.Controllers
         [HttpPost("invoice")]
         public IActionResult CreateInvoice([FromBody] Invoice invoice)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == invoice.CustomerId);
-            var tasks = _repositories.TaskDtos.Where(t => t.CustomerId == customer.Id).ToList();
-
-            var totalSum = tasks.Select(t => t.Amount).Sum();
-
-            var invoiceDto = new InvoiceDto
-            {
-                Id = invoice.Id,
-                Customer = customer,
-                Tasks = tasks,
-                TotalSum = totalSum
-            };
-
-            _repositories.InvoiceDtos.Add(invoiceDto);
-
-            return Ok(invoiceDto);
+            return Ok();
         }
 
         /// <summary>
@@ -93,8 +76,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/customer_invoices")]
         public IActionResult GetInvoicesById([FromRoute] int id)
         {
-            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
-            return Ok(invoices);
+            return Ok();
         }
 
         /// <summary>
@@ -114,7 +96,7 @@ namespace TimeSheets.Controllers
         [HttpGet("exposed_invoices")]
         public IActionResult GetAllInvoices()
         {
-            return Ok(_repositories.InvoiceDtos);
+            return Ok();
         }
     }
 }

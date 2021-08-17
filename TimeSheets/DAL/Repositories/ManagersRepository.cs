@@ -12,11 +12,11 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ManagersRepository : IManagerRepository
     {
-        private readonly ITasksRepository _tasksRepository;
+        private readonly IJobRepository _tasksRepository;
         private readonly IContractsRepository _contractsRepository;
         private readonly ICustomersRepository _customersRepository;
 
-        public ManagersRepository(ITasksRepository tasksRepository,
+        public ManagersRepository(IJobRepository tasksRepository,
             IContractsRepository contractsRepository,
             ICustomersRepository customersRepository)
         {
@@ -25,7 +25,7 @@ namespace TimeSheets.DAL.Repositories
             _customersRepository = customersRepository;
         }
 
-        public async Task<IEnumerable<Models.Task>> CreateTask(Models.Task task)
+        public async Task<IEnumerable<Models.Job>> CreateTask(Models.Job task)
         {
             return await _tasksRepository.CreateObjects(task);
         }

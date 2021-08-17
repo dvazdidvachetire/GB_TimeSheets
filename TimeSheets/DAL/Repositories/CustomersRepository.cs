@@ -14,9 +14,12 @@ namespace TimeSheets.DAL.Repositories
     {
         private IList<Customer> _customers = new List<Customer>();
         private readonly IInvoicesRepository _invoicesRepository;
-        public CustomersRepository(IInvoicesRepository invoicesRepository)
+        private readonly IContractsRepository _contractsRepository;
+        public CustomersRepository(IInvoicesRepository invoicesRepository,
+            IContractsRepository contractsRepository)
         {
             _invoicesRepository = invoicesRepository;
+            _contractsRepository = contractsRepository;
         }
 
         public async Task<IEnumerable<Customer>> CreateObjects(Customer customer)

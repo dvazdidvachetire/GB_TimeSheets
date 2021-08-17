@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TimeSheets.DAL.Models
 {
-    public class Task
+    public class Job
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }

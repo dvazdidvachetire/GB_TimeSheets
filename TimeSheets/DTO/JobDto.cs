@@ -8,7 +8,7 @@ using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DTO
 {
-    public class TaskDto
+    public class JobDto
     {
         [JsonIgnore] public int Id { get; set; }
         [JsonIgnore] public int CustomerId { get; set; }
