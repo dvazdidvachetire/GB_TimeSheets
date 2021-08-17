@@ -25,19 +25,20 @@ namespace TimeSheets.DAL.Repositories
         /// </summary>
         /// <param name="employee">сотрудник</param>
         /// <returns></returns>
-        public async Task CreateObjects(Employee employee)
+        public async Task<IEnumerable<Employee>> CreateObjects(Employee employee)
         {
             await Task.Run(() => _employees.Add(employee));
+            return _employees;
         }
 
-        /// <summary>
-        /// Возвращает сотрудника по его ид
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>сотрудник</returns>
-        public async Task<Employee> GetObject(int id)
+        public async Task<IEnumerable<Employee>> GetObjects()
         {
-            return await Task.Run( () => _employees.SingleOrDefault(e => e.Id == id));
+            return await Task.Run(() => _employees);
+        }
+
+        public async Task<Employee> GetByIdEmployee(int id)
+        {
+            return await Task.Run(() => _employees.SingleOrDefault(e => e.Id == id));
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace TimeSheets.DAL.Repositories
         /// <param name="id">ид сотрудника</param>
         /// <param name="employee">новые данные сотрудника</param>
         /// <returns></returns>
-        public async Task UpdateObject(int id, Employee employee)
+        public async Task<IEnumerable<Employee>> UpdateObjects(int id, Employee employee)
         {
             await Task.Run(() =>
             {
@@ -62,6 +63,8 @@ namespace TimeSheets.DAL.Repositories
 
                 }).ToList();
             });
+
+            return _employees;
         }
 
         /// <summary>
@@ -69,9 +72,10 @@ namespace TimeSheets.DAL.Repositories
         /// </summary>
         /// <param name="id">ид сотрудника</param>
         /// <returns></returns>
-        public async Task DeleteObject(int id)
+        public async Task<IEnumerable<Employee>> DeleteObjects(int id)
         {
             await Task.Run(() => _employees.RemoveAt(id));
+            return _employees;
         }
 
         /// <summary>
@@ -82,7 +86,9 @@ namespace TimeSheets.DAL.Repositories
         /// <returns>задача</returns>
         public async Task<TaskDto> GetEmployeeTask(int id, int idT)
         {
-            return await _tasksRepository.GetByIdCompletedTask(id, idT);
+            var tasks = await _tasksRepository.GetCompletedTasksById(id);
+            var task = await Task.Run(() => tasks.SingleOrDefault(t => t.Id == idT));
+            return task;
         }
 
         /// <summary>
@@ -92,7 +98,7 @@ namespace TimeSheets.DAL.Repositories
         /// <returns>список задач</returns>
         public async Task<IEnumerable<TaskDto>> GetEmployeeTasks(int id)
         {
-            return await _tasksRepository.GetByIdCompletedTasks(id);
+            return await _tasksRepository.GetCompletedTasksById(id);
         }
 
         /// <summary>
@@ -102,7 +108,9 @@ namespace TimeSheets.DAL.Repositories
         /// <returns>задача</returns>
         public async Task<Models.Task> GetTask(int id)
         {
-            return await _tasksRepository.GetByIdTask(id);
+            var tasks = await _tasksRepository.GetObjects();
+            var task = await Task.Run(() => tasks.SingleOrDefault(t => t.Id == id));
+            return task;
         }
 
         /// <summary>
@@ -111,7 +119,7 @@ namespace TimeSheets.DAL.Repositories
         /// <returns>список задач</returns>
         public async Task<IEnumerable<Models.Task>> GetAllTask()
         {
-            return await _tasksRepository.GetAllTasks();
+            return await _tasksRepository.GetObjects();
         }
 
         /// <summary>

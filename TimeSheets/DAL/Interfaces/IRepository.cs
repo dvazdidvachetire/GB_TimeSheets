@@ -8,9 +8,9 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IRepository<T>
     {
-        Task CreateObjects(T obj);
-        Task<T> GetObject(int id);
-        Task UpdateObject(int id, T obj);
-        Task DeleteObject(int id);
+        Task<IEnumerable<T>> CreateObjects(T obj);
+        Task<IEnumerable<T>> GetObjects();
+        Task<IEnumerable<T>> UpdateObjects(int id, T obj);
+        Task<IEnumerable<T>> DeleteObjects(int id);
     }
 }

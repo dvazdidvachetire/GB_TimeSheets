@@ -27,12 +27,12 @@ namespace TimeSheets.Controllers
         /// Создает нового сотрудника
         /// </summary>
         /// <param name="employee">Сотрудник</param>
-        /// <returns>Строка об успешной регистрации</returns>
+        /// <returns>Список сотрудников</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            await _employeesRepository.CreateObjects(employee);
-            return await Task.Run(() => Ok("Регистрация прошла успешно!"));
+            var employees = await _employeesRepository.CreateObjects(employee);
+            return Ok(employee);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace TimeSheets.Controllers
         public async Task<IActionResult> GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
         {
             var task = await _employeesRepository.GetEmployeeTask(id, idT);
-            return await Task.Run(() => Ok(task));
+            return Ok(task);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace TimeSheets.Controllers
         public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await _employeesRepository.GetAllTask();
-            return await Task.Run( () => Ok(tasks));
+            return Ok(tasks);
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/profile")]
         public async Task<IActionResult> GetProfile([FromRoute] int id)
         {
-            var employee = await _employeesRepository.GetObject(id);
-            return await Task.Run( () => Ok(employee));
+            var employee = await _employeesRepository.GetByIdEmployee(id);
+            return Ok(employee);
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace TimeSheets.Controllers
         [HttpPut("{id}/edit_profile_employee")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
-            await _employeesRepository.UpdateObject(id, employee);
-            return await Task.Run(() => Ok("Профиль успешно изменен!"));
+            await _employeesRepository.UpdateObjects(id, employee);
+            return Ok("Профиль успешно изменен!");
         }
 
         /// <summary>
@@ -129,8 +129,8 @@ namespace TimeSheets.Controllers
         [HttpDelete("delete_profile_employee")]
         public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            await _employeesRepository.DeleteObject(id);
-            return await Task.Run(() => Ok("Профиль успешно удален!"));
+            await _employeesRepository.DeleteObjects(id);
+            return Ok("Профиль успешно удален!");
         }
     }
 }

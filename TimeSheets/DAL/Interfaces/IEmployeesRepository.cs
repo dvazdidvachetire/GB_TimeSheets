@@ -10,6 +10,7 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IEmployeesRepository : IRepository<Employee>
     {
+        Task<Employee> GetByIdEmployee(int id);
         Task<TaskDto> GetEmployeeTask(int id, int idT);
         Task<IEnumerable<TaskDto>> GetEmployeeTasks(int id);
         Task<Models.Task> GetTask(int id);

@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Models;
+using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Interfaces
 {
     public interface IManagerRepository
     {
-        Task<IEnumerable<Contract>> CreateContract(Contract contract);
+        Task<IEnumerable<ContractDto>> CreateContract(Contract contract);
+        Task<ContractDto> GetByIdContract(int id, int idC);
+        Task<IEnumerable<ContractDto>> GetByIdContracts(int id);
+        Task<IEnumerable<ContractDto>> GetAllContracts();
         Task<IEnumerable<Models.Task>> CreateTask(Models.Task task);
     }
 }

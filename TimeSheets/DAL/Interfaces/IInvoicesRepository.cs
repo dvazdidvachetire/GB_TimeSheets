@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Models;
+using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Interfaces
 {
-    public interface IInvoicesRepository
+    public interface IInvoicesRepository : IRepository<Invoice>
     {
-        
+        Task<IEnumerable<InvoiceDto>> ExposedInvoices();
     }
 }

@@ -27,12 +27,31 @@ namespace TimeSheets.DAL.Repositories
 
         public async Task<IEnumerable<Models.Task>> CreateTask(Models.Task task)
         {
-            return await _tasksRepository.CreateTask(task);
+            return await _tasksRepository.CreateObjects(task);
         }
 
-        public async Task<IEnumerable<Contract>> CreateContract(Contract contract)
+        public async Task<IEnumerable<ContractDto>> CreateContract(Contract contract)
         {
             return await _contractsRepository.CreateContract(contract);
+        }
+
+        public async Task<ContractDto> GetByIdContract(int id, int idC)
+        {
+            var contracts = await GetByIdContracts(id);
+            var contract = await Task.Run(() => contracts.SingleOrDefault(c => c.Id == idC));
+            return contract;
+        }
+
+        public async Task<IEnumerable<ContractDto>> GetByIdContracts(int id)
+        {
+            var contracts = await _contractsRepository.GetAllContracts();
+            var customerContracts = await Task.Run(() => contracts.Where(c => c.Customer.Id == id));
+            return customerContracts;
+        }
+
+        public async Task<IEnumerable<ContractDto>> GetAllContracts()
+        {
+            return await Task.Run(() => _contractsRepository.GetAllContracts());
         }
     }
 }

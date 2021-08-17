@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-
 namespace TimeSheets.DAL.Interfaces
 {
     public interface IContractsRepository
     {
-        Task<IEnumerable<Contract>> CreateContract(Contract contract);
+        Task<IEnumerable<ContractDto>> CreateContract(Contract contract);
+        Task<IEnumerable<ContractDto>> GetAllContracts();
     }
 }

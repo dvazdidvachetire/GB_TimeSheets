@@ -79,9 +79,9 @@ namespace TimeSheets.Controllers
         /// <param name="id">ид покупателя</param>
         /// <returns>Список контрактов конкретного покупателя</returns>
         [HttpGet("{id}/customer_contracts")]
-        public IActionResult GetContractById([FromRoute] int id)
+        public async Task<IActionResult> GetContractById([FromRoute] int id)
         {
-            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == id);
+            var contracts = await _managerRepository.GetByIdContracts(id);
             return Ok(contracts);
         }
 
@@ -102,9 +102,9 @@ namespace TimeSheets.Controllers
         /// </summary>
         /// <returns>Список контрактов</returns>
         [HttpGet("contracts")]
-        public IActionResult GetAllContracts()
+        public async Task<IActionResult> GetAllContracts()
         {
-            return Ok(_repositories.Contracts);
+            return Ok(await _managerRepository.GetAllContracts());
         }
 
         /// <summary>

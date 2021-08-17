@@ -28,43 +28,36 @@ namespace TimeSheets.DAL.Repositories
                 });
         }
 
-        public async Task<IEnumerable<Task>> CreateTask(Task task)
+        public async Task<IEnumerable<Task>> CreateObjects(Task task)
         {
             await System.Threading.Tasks.Task.Run(() => _tasks.Add(task));
             await System.Threading.Tasks.Task.Run(async () => _tasksDtos.Add(await Map(task)));
             return _tasks;
         }
 
-        public async Task<Task> GetByIdTask(int id)
+        public async Task<IEnumerable<Task>> GetTasksById(int id)
         {
-            return await System.Threading.Tasks.Task.Run(() => _tasks.SingleOrDefault(t => t.Id == id));
+            return await System.Threading.Tasks.Task.Run(() => _tasks.Where(t => t.Id == id));
         }
 
-        public async Task<IEnumerable<Task>> GetByIdTasks(int id)
-        {
-            return await System.Threading.Tasks.Task.Run(() => _tasks.Where(t => t.CustomerId == id));
-        }
-
-        public async Task<IEnumerable<Task>> GetAllTasks()
+        public async Task<IEnumerable<Task>> GetObjects()
         {
             return await System.Threading.Tasks.Task.Run(() => _tasks);
         }
 
-        public async Task<TaskDto> GetByIdCompletedTask(int id, int idT)
+        public async Task<IEnumerable<TaskDto>> GetCompletedTasks()
         {
-            var tasks = await GetByIdCompletedTasks(id);
-            return await System.Threading.Tasks.Task.Run(() => tasks.SingleOrDefault(t => t.Id == idT));
+            return await System.Threading.Tasks.Task.Run(() => _tasksDtos);
         }
 
-        public async Task<IEnumerable<TaskDto>> GetByIdCompletedTasks(int id)
+        public async Task<IEnumerable<TaskDto>> GetCompletedTasksById(int id)
         {
-            return await System.Threading.Tasks.Task.Run(() => _tasksDtos.Where(t => t.TimeSheet.EmployeeId == id));
+            return await System.Threading.Tasks.Task.Run(() => _tasksDtos.Where(t => t.CustomerId == id));
         }
-
 
         public async Task<TaskDto> UpdateTask(int id, TimeSheet timeSheet)
         {
-            var task = await GetByIdTask(id);
+            var task = _tasks.SingleOrDefault(t => t.Id == id);
 
             task.TimeSheet = timeSheet;
 
@@ -82,6 +75,16 @@ namespace TimeSheets.DAL.Repositories
             var taskDto = await Map(task);
 
             return taskDto;
+        }
+
+        public Task<IEnumerable<Task>> UpdateObjects(int id, Task task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Task>> DeleteObjects(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
