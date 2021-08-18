@@ -13,7 +13,7 @@ namespace TimeSheets.DTO
     {
         [JsonIgnore] public int Id { get; set; }
         public Customer Customer { get; set; }
-        public IEnumerable<JobDto> Tasks { get; set; }
+        public IEnumerable<JobDto> Jobs { get; set; }
         public decimal TotalSum { get; set; }
     }
 }

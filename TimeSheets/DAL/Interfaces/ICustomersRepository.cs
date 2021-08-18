@@ -10,8 +10,5 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface ICustomersRepository : IRepository<Customer>
     {
-        Task<Customer> EditProfile(int id, Customer customer);
-        Task<Customer> GetByIdCustomer(int id);
-        Task<IEnumerable<InvoiceDto>> GetInvoices(int id);
     }
 }

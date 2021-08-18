@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Repositories;
+using TimeSheets.Services.Interfaces;
+using TimeSheets.Services.Logic;
 
 namespace TimeSheets
 {
@@ -42,7 +44,7 @@ namespace TimeSheets
 
         private void ConfigureServicesRepositories(IServiceCollection services)
         {
-            //services.AddSingleton<ICustomersRepository, CustomersRepository>();
+            services.AddSingleton<ICustomersRepository, CustomersRepository>();
             services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
             services.AddSingleton<IJobRepository, JobRepository>();
             services.AddSingleton<IContractsRepository, ContractsRepository>();
@@ -51,7 +53,9 @@ namespace TimeSheets
 
         private void ConfigureServicesLogic(IServiceCollection services)
         {
-
+            services.AddSingleton<ICustomerService, CustomerService>();
+            services.AddSingleton<IEmployeeService, EmployeeService>();
+            services.AddSingleton<IManagerService, ManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

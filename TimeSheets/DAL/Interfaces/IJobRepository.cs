@@ -10,9 +10,5 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IJobRepository : IRepository<Job>
     {
-        Task<IEnumerable<JobDto>> GetCompletedTasks();
-        Task<IEnumerable<JobDto>> GetCompletedTasksById(int id);
-        Task<IEnumerable<Job>> GetTasksById(int id);
-        Task<JobDto> UpdateTask(int id, TimeSheet timeSheet);
     }
 }

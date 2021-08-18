@@ -12,49 +12,18 @@ namespace TimeSheets.DAL.Repositories
 {
     public class ContractsRepository : IContractsRepository
     {
-        private IList<ContractDto> _contractsDto = new List<ContractDto>();
-        private readonly IJobRepository _tasksRepository;
-        private readonly ICustomersRepository _customersRepository;
-
-        public ContractsRepository(IJobRepository tasksRepository,
-            ICustomersRepository customersRepository)
-        {
-            _tasksRepository = tasksRepository;
-            _customersRepository = customersRepository;
-        }
-
-        private async Task<ContractDto> Map(Contract contract)
-        {
-            var contractDto = await Task.Run(async () => new ContractDto
-            {
-                Id = contract.Id,
-                NumberContract = contract.NumberContract,
-                Customer = await _customersRepository.GetByIdCustomer(contract.CustomerId),
-                Tasks = await _tasksRepository.GetTasksById(contract.Id)
-            });
-
-            return contractDto;
-        }
-
-        public Task<IEnumerable<ContractDto>> CreateContract(Contract contract)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<ContractDto>> GetAllContracts()
-        {
-            return await Task.Run(() => _contractsDto);
-        }
+        private IList<Contract> _contracts = new List<Contract>();
+        public IList<ContractDto> ContractsDto => new List<ContractDto>();
 
         public async Task<IEnumerable<Contract>> CreateObjects(Contract contract)
         {
-            await Task.Run(async () => _contractsDto.Add(await Map(contract)));
-            return null;
+            await Task.Run(() => _contracts.Add(contract));
+            return _contracts;
         }
 
-        public Task<IEnumerable<Contract>> GetObjects()
+        public async Task<IEnumerable<Contract>> GetObjects()
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => _contracts);
         }
 
         public Task<IEnumerable<Contract>> UpdateObjects(int id, Contract contract)

@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DTO;
 using TimeSheets.DAL.Models;
-using TimeSheets.DAL.Repositories;
-using Job = TimeSheets.DAL.Models.Job;
+using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers
 {
@@ -16,87 +15,60 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class ManagerController : ControllerBase
     {
-        private readonly IManagerRepository _managerRepository;
+        private readonly IManagerService _managerService;
 
-        public ManagerController(IManagerRepository managerRepository)
+        public ManagerController(IManagerService managerService)
         {
-            _managerRepository = managerRepository;
+            _managerService = managerService;
         }
 
-        /// <summary>
-        /// Создает задачи
-        /// </summary>
-        /// <param name="task">Задача</param>
-        /// <returns>Список задач</returns>
-        [HttpPost("task")]
-        public async Task<IActionResult> CreateTask([FromBody] Job task)
+        [HttpPost("job")]
+        public async Task<IActionResult> CreateJob([FromBody] Job job)
         {
-            return Ok(await _managerRepository.CreateTask(task));
+            var jobs = await _managerService.CreateJob(job);
+            return Ok(jobs);
         }
 
-        /// <summary>
-        /// Создает контракты
-        /// </summary>
-        /// <param name="contract">Контракт</param>
-        /// <returns>Список контрактов</returns>
         [HttpPost("contract")]
         public async Task<IActionResult> CreateContract([FromBody] Contract contract)
         {
-            return Ok(await _managerRepository.CreateContract(contract));
-        }
-
-        /// <summary>
-        /// Формирует счет
-        /// </summary>
-        /// <param name="invoice">Счет</param>
-        /// <returns>Счет</returns>
-        [HttpPost("invoice")]
-        public IActionResult CreateInvoice([FromBody] Invoice invoice)
-        {
-            return Ok();
-        }
-
-        /// <summary>
-        /// Возвращает контракты конкретного покупателя
-        /// </summary>
-        /// <param name="id">ид покупателя</param>
-        /// <returns>Список контрактов конкретного покупателя</returns>
-        [HttpGet("{id}/customer_contracts")]
-        public async Task<IActionResult> GetContractById([FromRoute] int id)
-        {
-            var contracts = await _managerRepository.GetByIdContracts(id);
+            var contracts = await _managerService.CreateContract(contract);
             return Ok(contracts);
         }
 
-        /// <summary>
-        /// Возвращает счета конкретного покупателя
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Список счетов конкретного покупателя</returns>
+        [HttpPost("invoice")]
+        public async Task<IActionResult> CreateInvoice([FromBody] Invoice invoice)
+        {
+            var invoices = await _managerService.CreateInvoice(invoice);
+            return Ok(invoices);
+        }
+
+        [HttpGet("{id}/customer_contracts")]
+        public async Task<IActionResult> GetContractsById([FromRoute] int id)
+        {
+            var contracts = await _managerService.GetContractsCustomer(id);
+            return Ok(contracts);
+        }
+
         [HttpGet("{id}/customer_invoices")]
-        public IActionResult GetInvoicesById([FromRoute] int id)
+        public async Task<IActionResult> GetInvoicesById([FromRoute] int id)
         {
-            return Ok();
+            var invoices = await _managerService.GetInvoicesCustomer(id);
+            return Ok(invoices);
         }
 
-        /// <summary>
-        /// Возвращает все контракты
-        /// </summary>
-        /// <returns>Список контрактов</returns>
         [HttpGet("contracts")]
-        public async Task<IActionResult> GetAllContracts()
+        public async Task<IActionResult> GetContracts()
         {
-            return Ok(await _managerRepository.GetAllContracts());
+            var contracts = await _managerService.GetContracts();
+            return Ok(contracts);
         }
 
-        /// <summary>
-        /// Возвращает все счета
-        /// </summary>
-        /// <returns>Список счетов</returns>
-        [HttpGet("exposed_invoices")]
-        public IActionResult GetAllInvoices()
+        [HttpGet("invoices")]
+        public async Task<IActionResult> GetInvoices()
         {
-            return Ok();
+            var invoices = await _managerService.GetInvoices();
+            return Ok(invoices);
         }
     }
 }

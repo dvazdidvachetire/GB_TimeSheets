@@ -6,9 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
-using TimeSheets.DAL.Repositories;
 using TimeSheets.DTO;
-using Task = System.Threading.Tasks.Task;
+using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers
 {
@@ -16,121 +15,67 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeesRepository _employeesRepository;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(IEmployeesRepository employeesRepository)
+        public EmployeesController(IEmployeeService employeeService)
         {
-            _employeesRepository = employeesRepository;
+            _employeeService = employeeService;
         }
 
-        /// <summary>
-        /// Создает нового сотрудника
-        /// </summary>
-        /// <param name="employee">Сотрудник</param>
-        /// <returns>Список сотрудников</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            var employees = await _employeesRepository.CreateObjects(employee);
-            return Ok(employee);
+            var employees = await _employeeService.RegisterEmployee(employee);
+            return Ok(employees);
         }
 
-        /// <summary>
-        /// Получает конкретную сделанную задачу конкретного сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="idT">ид задачи</param>
-        /// <returns>Задача</returns>
-        [HttpGet("{id}/completed_task/{idT}")]
-        public async Task<IActionResult> GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
+        [HttpGet("{id}/completed_task/{idJ}")]
+        public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
         {
-            var task = await _employeesRepository.GetEmployeeTask(id, idT);
+            var task = await _employeeService.GetJobEmployee(id, idJ);
             return Ok(task);
         }
 
-        /// <summary>
-        /// Возвращает список сделанных задач конкретного сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Список задач</returns>
         [HttpGet("{id}/completed_tasks")]
-        public async Task<IActionResult> GetEmployeeTasks([FromRoute] int id)
+        public async Task<IActionResult> GetJobsEmployee([FromRoute] int id)
         {
-            var tasks = await _employeesRepository.GetEmployeeTasks(id);
+            var tasks = await _employeeService.GetJobsEmployee(id);
             return Ok(tasks);
         }
 
-        /// <summary>
-        /// Возвращает конкретную задачу
-        /// </summary>
-        /// <param name="id">ид задачи</param>
-        /// <returns>Задача</returns>
         [HttpGet("task/{id}")]
-        public async Task<IActionResult> GetTask([FromRoute] int id)
+        public async Task<IActionResult> GetJob([FromRoute] int id)
         {
-            var task = await _employeesRepository.GetTask(id);
-            return await Task.Run(() => Ok(task));
+            var task = await _employeeService.GetJob(id);
+            return Ok(task);
         }
 
-        /// <summary>
-        /// Возвращает список всех задач
-        /// </summary>
-        /// <returns>Список задач</returns>
         [HttpGet("tasks")]
-        public async Task<IActionResult> GetAllTasks()
+        public async Task<IActionResult> GetAllJobs()
         {
-            var tasks = await _employeesRepository.GetAllTask();
+            var tasks = await _employeeService.GetJobs();
             return Ok(tasks);
         }
 
-        /// <summary>
-        /// Возвращает профиль сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Профиль сотрудника</returns>
-        [HttpGet("{id}/profile")]
-        public async Task<IActionResult> GetProfile([FromRoute] int id)
-        {
-            var employee = await _employeesRepository.GetByIdEmployee(id);
-            return Ok(employee);
-        }
-
-        /// <summary>
-        /// Дает возможность сотруднику изменить табель задачи 
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="timeSheet">табель</param>
-        /// <returns>Измененная задача</returns>
         [HttpPut("task/{id}/timesheet")]
         public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var taskDto = await _employeesRepository.CreateTimeSheet(id, timeSheet);
+            var taskDto = await _employeeService.ChangeTimeSheet(id, timeSheet);
             return Ok(taskDto);
         }
 
-        /// <summary>
-        /// Дает возможность сотруднику изменить его профиль
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="employee">сотрудник</param>
-        /// <returns>Строка о успешном изменении профиля</returns>
         [HttpPut("{id}/edit_profile_employee")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
-            await _employeesRepository.UpdateObjects(id, employee);
-            return Ok("Профиль успешно изменен!");
+            var employees = await _employeeService.ChangeEmployee(id, employee);
+            return Ok(employees);
         }
 
-        /// <summary>
-        /// Удаляет профиль сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Срока об успешном удалении</returns>
         [HttpDelete("delete_profile_employee")]
         public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            await _employeesRepository.DeleteObjects(id);
-            return Ok("Профиль успешно удален!");
+            var employees = await _employeeService.DeleteEmployee(id);
+            return Ok(employees);
         }
     }
 }

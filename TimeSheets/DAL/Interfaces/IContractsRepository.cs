@@ -9,7 +9,5 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IContractsRepository : IRepository<Contract>
     {
-        Task<IEnumerable<ContractDto>> CreateContract(Contract contract);
-        Task<IEnumerable<ContractDto>> GetAllContracts();
     }
 }

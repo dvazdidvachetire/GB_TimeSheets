@@ -10,6 +10,5 @@ namespace TimeSheets.DAL.Interfaces
 {
     public interface IInvoicesRepository : IRepository<Invoice>
     {
-        Task<IEnumerable<InvoiceDto>> ExposedInvoices();
     }
 }
