@@ -28,12 +28,12 @@ namespace TimeSheets.DAL.Repositories
 
         public Task<IEnumerable<Contract>> UpdateObjects(int id, Contract contract)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Task<IEnumerable<Contract>> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

@@ -27,12 +27,12 @@ namespace TimeSheets.DAL.Repositories
 
         public Task<IEnumerable<Invoice>> UpdateObjects(int id, Invoice invoice)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Task<IEnumerable<Invoice>> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

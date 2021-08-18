@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-using Job = TimeSheets.DAL.Models.Job;
 
 namespace TimeSheets.DAL.Repositories
 {
@@ -28,12 +27,12 @@ namespace TimeSheets.DAL.Repositories
 
         public Task<IEnumerable<Job>> UpdateObjects(int id, Job job)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Task<IEnumerable<Job>> DeleteObjects(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
