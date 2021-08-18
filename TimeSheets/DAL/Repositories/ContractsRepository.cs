@@ -13,7 +13,7 @@ namespace TimeSheets.DAL.Repositories
     public class ContractsRepository : IContractsRepository
     {
         private IList<Contract> _contracts = new List<Contract>();
-        public IList<ContractDto> ContractsDto => new List<ContractDto>();
+        public IList<ContractDto> ContractsDto { get; set; } = new List<ContractDto>();
 
         public async Task<IEnumerable<Contract>> CreateObjects(Contract contract)
         {

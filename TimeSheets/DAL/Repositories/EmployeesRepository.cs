@@ -13,12 +13,6 @@ namespace TimeSheets.DAL.Repositories
     public class EmployeesRepository : IEmployeesRepository
     {
         private IList<Employee> _employees = new List<Employee>();
-        private readonly IJobRepository _jobsRepository;
-
-        public EmployeesRepository(IJobRepository jobsRepository)
-        {
-            _jobsRepository = jobsRepository;
-        }
 
         public async Task<IEnumerable<Employee>> CreateObjects(Employee contract)
         {

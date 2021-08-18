@@ -13,7 +13,7 @@ namespace TimeSheets.DAL.Repositories
     public class JobRepository : IJobRepository
     {
         private IList<Job> _jobs = new List<Job>();
-        public IList<JobDto> JobsDtos => new List<JobDto>();
+        public IList<JobDto> JobsDtos { get; set; } = new List<JobDto>();
 
         public async Task<IEnumerable<Job>> CreateObjects(Job job)
         {

@@ -12,7 +12,7 @@ namespace TimeSheets.DAL.Repositories
     public class InvoicesRepository : IInvoicesRepository
     {
         private IList<Invoice> _invoices = new List<Invoice>();
-        public IList<InvoiceDto> InvoicesDtos => new List<InvoiceDto>();
+        public IList<InvoiceDto> InvoicesDtos { get; set; } = new List<InvoiceDto>();
 
         public async Task<IEnumerable<Invoice>> CreateObjects(Invoice invoice)
         {

@@ -29,8 +29,8 @@ namespace TimeSheets.Controllers
             return Ok(customers);
         }
 
-        [HttpGet("{idC}/contract/{id}")]
-        public async Task<IActionResult> GetContract([FromRoute] int idC, [FromRoute] int id)
+        [HttpGet("{id}/contract/{idC}")]
+        public async Task<IActionResult> GetContract([FromRoute] int id, [FromRoute] int idC)
         {
             var contract = await _customerService.GetContractCustomer(id, idC);
             return Ok(contract);
@@ -43,7 +43,7 @@ namespace TimeSheets.Controllers
             return Ok(contracts);
         }
 
-        [HttpGet("{idC}/invoice/{id}")]
+        [HttpGet("{id}/invoice/{idI}")]
         public async Task<IActionResult> GetInvoice([FromRoute] int id, [FromRoute] int idI)
         {
             var invoice = await _customerService.GetInvoiceCustomer(id, idI);
