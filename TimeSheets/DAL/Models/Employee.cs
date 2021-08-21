@@ -11,5 +11,6 @@ namespace TimeSheets.DAL.Models
     {
         [JsonIgnore] public int Id { get; set; }
         public string FullName { get; set; }
+        [JsonIgnore] public bool IsDeleted { get; set; }
     }
 }

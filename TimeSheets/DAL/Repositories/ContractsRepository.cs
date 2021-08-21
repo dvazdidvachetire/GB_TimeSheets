@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories.Context;
@@ -23,7 +24,7 @@ namespace TimeSheets.DAL.Repositories
         private IList<Contract> _contracts = new List<Contract>();
         public IList<ContractDto> ContractsDto { get; set; } = new List<ContractDto>();
 
-        public async Task<IEnumerable<Contract>> CreateObjects(Contract contract)
+        public async Task<bool> CreateObjects(Contract contract)
         {
             try
             {
@@ -33,23 +34,31 @@ namespace TimeSheets.DAL.Repositories
             catch (Exception e)
             {
                 Debug.Write($"Ошибка! Ошибка! {e.Message}");
+                return false;
             }
 
-            await Task.Run(() => _contracts.Add(contract));
-            return _contracts;
+            return true;
         }
 
-        public async Task<IEnumerable<Contract>> GetObjects()
+        public async Task<IReadOnlyList<Contract>> GetObjects()
         {
-            return await Task.Run(() => _contracts);
+            try
+            {
+                return await _context.Contracts.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+                return null;
+            }
         }
 
-        public Task<IEnumerable<Contract>> UpdateObjects(int id, Contract contract)
+        public Task<bool> UpdateObjects(int id, Contract contract)
         {
             return null;
         }
 
-        public Task<IEnumerable<Contract>> DeleteObjects(int id)
+        public Task<bool> DeleteObjects(int id)
         {
             return null;
         }

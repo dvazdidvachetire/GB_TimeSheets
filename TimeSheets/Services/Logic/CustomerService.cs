@@ -26,7 +26,7 @@ namespace TimeSheets.Services.Logic
             _invoicesRepository = invoicesRepository;
         }
 
-        public async Task<IEnumerable<Customer>> RegisterCustomer(Customer customer)
+        public async Task<bool> RegisterCustomer(Customer customer)
         {
             return await _customersRepository.CreateObjects(customer);
         }
@@ -72,12 +72,12 @@ namespace TimeSheets.Services.Logic
             return default;
         }
 
-        public async Task<IEnumerable<Customer>> ChangeCustomer(int id, Customer customer)
+        public async Task<bool> ChangeCustomer(int id, Customer customer)
         {
             return await _customersRepository.UpdateObjects(id, customer);
         }
 
-        public async Task<IEnumerable<Customer>> DeleteCustomer(int id)
+        public async Task<bool> DeleteCustomer(int id)
         {
             return await _customersRepository.DeleteObjects(id);
         }

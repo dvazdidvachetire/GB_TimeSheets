@@ -25,22 +25,22 @@ namespace TimeSheets.Controllers
         [HttpPost("job")]
         public async Task<IActionResult> CreateJob([FromBody] Job job)
         {
-            var jobs = await _managerService.CreateJob(job);
-            return Ok(jobs);
+            var isCreated = await _managerService.CreateJob(job);
+            return Ok(isCreated);
         }
 
         [HttpPost("contract")]
         public async Task<IActionResult> CreateContract([FromBody] Contract contract)
         {
-            var contracts = await _managerService.CreateContract(contract);
-            return Ok(contracts);
+            var isCreated = await _managerService.CreateContract(contract);
+            return Ok(isCreated);
         }
 
         [HttpPost("invoice")]
         public async Task<IActionResult> CreateInvoice([FromBody] Invoice invoice)
         {
-            var invoices = await _managerService.CreateInvoice(invoice);
-            return Ok(invoices);
+            var isCreated = await _managerService.CreateInvoice(invoice);
+            return Ok(isCreated);
         }
 
         [HttpGet("{id}/customer_contracts")]

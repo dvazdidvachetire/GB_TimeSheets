@@ -22,7 +22,7 @@ namespace TimeSheets.Services.Logic
             _employeesRepository = employeesRepository;
         }
 
-        public async Task<IEnumerable<Employee>> RegisterEmployee(Employee employee)
+        public async Task<bool> RegisterEmployee(Employee employee)
         {
             return await _employeesRepository.CreateObjects(employee);
         }
@@ -62,7 +62,7 @@ namespace TimeSheets.Services.Logic
             return await _jobRepository.GetObjects();
         }
 
-        public async Task<IEnumerable<Employee>> ChangeEmployee(int id, Employee employee)
+        public async Task<bool> ChangeEmployee(int id, Employee employee)
         {
             return await _employeesRepository.UpdateObjects(id, employee);
         }
@@ -81,7 +81,7 @@ namespace TimeSheets.Services.Logic
             return await Map(job);
         }
 
-        public async Task<IEnumerable<Employee>> DeleteEmployee(int id)
+        public async Task<bool> DeleteEmployee(int id)
         {
            return await _employeesRepository.DeleteObjects(id);
         }

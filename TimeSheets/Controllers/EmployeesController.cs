@@ -25,8 +25,8 @@ namespace TimeSheets.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            var employees = await _employeeService.RegisterEmployee(employee);
-            return Ok(employees);
+            var isRegistered = await _employeeService.RegisterEmployee(employee);
+            return Ok(isRegistered);
         }
 
         [HttpGet("{id}/completed_task/{idJ}")]
@@ -67,15 +67,15 @@ namespace TimeSheets.Controllers
         [HttpPut("{id}/edit_profile_employee")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
-            var employees = await _employeeService.ChangeEmployee(id, employee);
-            return Ok(employees);
+            var isChanged = await _employeeService.ChangeEmployee(id, employee);
+            return Ok(isChanged);
         }
 
-        [HttpDelete("delete_profile_employee")]
+        [HttpDelete("{id}/delete_profile_employee")]
         public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            var employees = await _employeeService.DeleteEmployee(id);
-            return Ok(employees);
+            var isDeleted = await _employeeService.DeleteEmployee(id);
+            return Ok(isDeleted);
         }
     }
 }

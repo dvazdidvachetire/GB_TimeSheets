@@ -15,5 +15,6 @@ namespace TimeSheets.DAL.Models
         public string Description { get; set; }
         public decimal Amount { get; set; }
         [JsonIgnore] public TimeSheet TimeSheet { get; set; }
+        [JsonIgnore] public bool IsDeleted { get; set; }
     }
 }

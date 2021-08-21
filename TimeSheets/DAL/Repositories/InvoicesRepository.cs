@@ -1,36 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
+using TimeSheets.DAL.Repositories.Context;
 using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Repositories
 {
     internal sealed class InvoicesRepository : IInvoicesRepository
     {
-        private IList<Invoice> _invoices = new List<Invoice>();
         public IList<InvoiceDto> InvoicesDtos { get; set; } = new List<InvoiceDto>();
+        private readonly DbContextRepository _context;
 
-        public async Task<IEnumerable<Invoice>> CreateObjects(Invoice invoice)
+        public InvoicesRepository(DbContextRepository context)
         {
-             await Task.Run(() => _invoices.Add(invoice));
-             return _invoices;
+            _context = context;
         }
 
-        public async Task<IEnumerable<Invoice>> GetObjects()
+        public async Task<bool> CreateObjects(Invoice invoice)
         {
-            return await Task.Run(() => _invoices);
+            try
+            {
+                await _context.AddAsync(invoice);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Write($"Error! Error! {e.Message}");
+                return false;
+            }
+
+            return true;
         }
 
-        public Task<IEnumerable<Invoice>> UpdateObjects(int id, Invoice invoice)
+        public async Task<IReadOnlyList<Invoice>> GetObjects()
+        {
+            try
+            {
+                return await _context.Invoices.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+                return null;
+            }
+        }
+
+        public Task<bool> UpdateObjects(int id, Invoice invoice)
         {
             return null;
         }
 
-        public Task<IEnumerable<Invoice>> DeleteObjects(int id)
+        public Task<bool> DeleteObjects(int id)
         {
             return null;
         }

@@ -10,9 +10,9 @@ namespace TimeSheets.Services.Interfaces
 {
     public interface IManagerService
     {
-        Task<IEnumerable<Job>> CreateJob(Job job);
-        Task<IEnumerable<Contract>> CreateContract(Contract contract);
-        Task<IEnumerable<Invoice>> CreateInvoice(Invoice invoice);
+        Task<bool> CreateJob(Job job);
+        Task<bool> CreateContract(Contract contract);
+        Task<bool> CreateInvoice(Invoice invoice);
         Task<IEnumerable<Contract>> GetContracts();
         Task<IEnumerable<Invoice>> GetInvoices();
         Task<IEnumerable<ContractDto>> GetContractsCustomer(int id);

@@ -19,6 +19,7 @@ namespace TimeSheets.DAL.Repositories.Context
 
         public DbContextRepository(DbContextOptions<DbContextRepository> options) : base(options)
         {
+            Database.EnsureCreated();
         }
     }
 }

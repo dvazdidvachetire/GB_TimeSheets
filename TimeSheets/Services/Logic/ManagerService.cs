@@ -29,12 +29,12 @@ namespace TimeSheets.Services.Logic
             _customersRepository = customersRepository;
         }
 
-        public async Task<IEnumerable<Job>> CreateJob(Job job)
+        public async Task<bool> CreateJob(Job job)
         {
             return await _jobRepository.CreateObjects(job);
         }
 
-        public async Task<IEnumerable<Contract>> CreateContract(Contract contract)
+        public async Task<bool> CreateContract(Contract contract)
         {
             if (_contractsRepository is ContractsRepository repository)
             {
@@ -44,7 +44,7 @@ namespace TimeSheets.Services.Logic
             return await _contractsRepository.CreateObjects(contract);
         }
 
-        public async Task<IEnumerable<Invoice>> CreateInvoice(Invoice invoice)
+        public async Task<bool> CreateInvoice(Invoice invoice)
         {
             if (_invoicesRepository is InvoicesRepository repository)
             {
