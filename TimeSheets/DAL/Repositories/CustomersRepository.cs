@@ -8,7 +8,7 @@ using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class CustomersRepository : ICustomersRepository
+    internal sealed class CustomersRepository : ICustomersRepository
     {
         private IList<Customer> _customers = new List<Customer>();
 

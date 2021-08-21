@@ -9,7 +9,7 @@ using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class JobRepository : IJobRepository
+    internal sealed class JobRepository : IJobRepository
     {
         private IList<Job> _jobs = new List<Job>();
         public IList<JobDto> JobsDtos { get; set; } = new List<JobDto>();

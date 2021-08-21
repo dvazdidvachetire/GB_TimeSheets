@@ -10,7 +10,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class ManagersRepository : IManagerRepository
+    internal sealed class ManagersRepository : IManagerRepository
     {
     }
 }

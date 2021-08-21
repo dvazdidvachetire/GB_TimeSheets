@@ -96,7 +96,6 @@ namespace TimeSheets.Services.Logic
 
             return await Task.Run(() => new ContractDto
             {
-                Id = contract.Id,
                 NumberContract = contract.NumberContract,
                 Customer = customer,
                 Jobs = jobsCustomer

@@ -9,7 +9,7 @@ using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Repositories
 {
-    public class InvoicesRepository : IInvoicesRepository
+    internal sealed class InvoicesRepository : IInvoicesRepository
     {
         private IList<Invoice> _invoices = new List<Invoice>();
         public IList<InvoiceDto> InvoicesDtos { get; set; } = new List<InvoiceDto>();

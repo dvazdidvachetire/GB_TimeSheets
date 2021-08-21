@@ -11,8 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Repositories;
+using TimeSheets.DAL.Repositories.Context;
 using TimeSheets.Services.Interfaces;
 using TimeSheets.Services.Logic;
 
@@ -30,8 +32,9 @@ namespace TimeSheets
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            services.AddDbContext<DbContextRepository>(op => op.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             ConfigureServicesRepositories(services);
             ConfigureServicesLogic(services);
@@ -44,18 +47,18 @@ namespace TimeSheets
 
         private void ConfigureServicesRepositories(IServiceCollection services)
         {
-            services.AddSingleton<ICustomersRepository, CustomersRepository>();
-            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
-            services.AddSingleton<IJobRepository, JobRepository>();
-            services.AddSingleton<IContractsRepository, ContractsRepository>();
-            services.AddSingleton<IInvoicesRepository, InvoicesRepository>();
+            services.AddScoped<ICustomersRepository, CustomersRepository>();
+            services.AddScoped<IEmployeesRepository, EmployeesRepository>();
+            services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<IContractsRepository, ContractsRepository>();
+            services.AddScoped<IInvoicesRepository, InvoicesRepository>();
         }
 
         private void ConfigureServicesLogic(IServiceCollection services)
         {
-            services.AddSingleton<ICustomerService, CustomerService>();
-            services.AddSingleton<IEmployeeService, EmployeeService>();
-            services.AddSingleton<IManagerService, ManagerService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IManagerService, ManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
