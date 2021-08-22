@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories;
@@ -16,14 +17,17 @@ namespace TimeSheets.Services.Logic
         private readonly ICustomersRepository _customersRepository;
         private readonly IContractsRepository _contractsRepository;
         private readonly IInvoicesRepository _invoicesRepository;
+        private readonly IJobRepository _jobRepository;
 
         public CustomerService(ICustomersRepository customersRepository,
             IContractsRepository contractsRepository,
-            IInvoicesRepository invoicesRepository)
+            IInvoicesRepository invoicesRepository,
+            IJobRepository jobRepository)
         {
             _customersRepository = customersRepository;
             _contractsRepository = contractsRepository;
             _invoicesRepository = invoicesRepository;
+            _jobRepository = jobRepository;
         }
 
         public async Task<bool> RegisterCustomer(Customer customer)
@@ -31,7 +35,7 @@ namespace TimeSheets.Services.Logic
             return await _customersRepository.CreateObjects(customer);
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<IReadOnlyList<Customer>> GetCustomers()
         {
             return await _customersRepository.GetObjects();
         }
@@ -40,36 +44,39 @@ namespace TimeSheets.Services.Logic
         {
             var contracts = await GetContractsCustomer(id);
             var contract = await Task.Run(() => contracts.SingleOrDefault(c => c.Id == idC));
-            return contract;
+
+            var customers = await _customersRepository.GetObjects();
+            var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == id));
+
+            var jobs = await _jobRepository.GetObjects();
+            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.CustomerId == id));
+
+            var mc = await Task.Run( () => new MapperConfiguration(cfg => cfg.CreateMap<Contract, ContractDto>()
+                .ForMember(dest => dest.Customer, act => act.MapFrom(src => customer))
+                .ForMember(dest => dest.Jobs, act => act.MapFrom(src => jobsCustomer))));
+            var mapper = mc.CreateMapper();
+
+            return await Task.Run(() => mapper.Map<ContractDto>(contract));
         }
 
-        public async Task<IEnumerable<ContractDto>> GetContractsCustomer(int id)
+        public async Task<IReadOnlyList<Contract>> GetContractsCustomer(int id)
         {
-            if (_contractsRepository is ContractsRepository contractsRepository)
-            {
-                var contractsCustomer = await Task.Run(() => contractsRepository.ContractsDto.Where(c => c.Customer.Id == id));
-                return contractsCustomer;
-            }
-
-            return default;
+            var contracts = await _contractsRepository.GetObjects();
+            return await Task.Run(() => contracts.Where(c => c.CustomerId == id).ToList());
         }
 
         public async Task<InvoiceDto> GetInvoiceCustomer(int id, int idI)
         {
-            var invoices = await GetInvoicesCustomer(id);
-            var invoice = await Task.Run(() => invoices.SingleOrDefault(i => i.Id == idI));
-            return invoice;
+            //var invoices = await GetInvoicesCustomer(id);
+            //var invoice = await Task.Run(() => invoices.SingleOrDefault(i => i.Id == idI));
+            //return invoice;
+            return null;
         }
 
-        public async Task<IEnumerable<InvoiceDto>> GetInvoicesCustomer(int id)
+        public async Task<IReadOnlyList<Invoice>> GetInvoicesCustomer(int id)
         {
-            if (_invoicesRepository is InvoicesRepository invoicesRepository)
-            {
-                var invoicesCustomer = await Task.Run(() => invoicesRepository.InvoicesDtos.Where(i => i.Customer.Id == id));
-                return invoicesCustomer;
-            }
-
-            return default;
+            var invoices = await _invoicesRepository.GetObjects();
+            return await Task.Run(() => invoices.Where(i => i.CustomerId == id).ToList());
         }
 
         public async Task<bool> ChangeCustomer(int id, Customer customer)

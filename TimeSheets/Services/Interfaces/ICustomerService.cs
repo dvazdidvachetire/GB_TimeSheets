@@ -11,11 +11,11 @@ namespace TimeSheets.Services.Interfaces
     public interface ICustomerService
     {
         Task<bool> RegisterCustomer(Customer customer);
-        Task<IEnumerable<Customer>> GetCustomers();
+        Task<IReadOnlyList<Customer>> GetCustomers();
         Task<ContractDto> GetContractCustomer(int id, int idC);
-        Task<IEnumerable<ContractDto>> GetContractsCustomer(int id);
+        Task<IReadOnlyList<Contract>> GetContractsCustomer(int id);
         Task<InvoiceDto> GetInvoiceCustomer(int id, int idI);
-        Task<IEnumerable<InvoiceDto>> GetInvoicesCustomer(int id);
+        Task<IReadOnlyList<Invoice>> GetInvoicesCustomer(int id);
         Task<bool> ChangeCustomer(int id, Customer customer);
         Task<bool> DeleteCustomer(int id);
     }

@@ -15,6 +15,6 @@ namespace TimeSheets.DTO
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
-        public TimeSheet TimeSheet { get; set; }
+        public IReadOnlyList<TimeSheet> TimeSheet { get; set; }
     }
 }

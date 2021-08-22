@@ -22,6 +22,7 @@ namespace TimeSheets.Controllers
             _customerService = customerService;
         }
 
+        //Регистрирует покупателя
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] Customer customer)
         {
@@ -29,6 +30,7 @@ namespace TimeSheets.Controllers
             return Ok(isRegistered);
         }
 
+        
         [HttpGet("{id}/contract/{idC}")]
         public async Task<IActionResult> GetContract([FromRoute] int id, [FromRoute] int idC)
         {
@@ -36,6 +38,7 @@ namespace TimeSheets.Controllers
             return Ok(contract);
         }
 
+        //Контракты покупателя
         [HttpGet("{id}/contracts")]
         public async Task<IActionResult> GetContracts([FromRoute] int id)
         {
@@ -43,6 +46,7 @@ namespace TimeSheets.Controllers
             return Ok(contracts);
         }
 
+        
         [HttpGet("{id}/invoice/{idI}")]
         public async Task<IActionResult> GetInvoice([FromRoute] int id, [FromRoute] int idI)
         {
@@ -50,6 +54,7 @@ namespace TimeSheets.Controllers
             return Ok(invoice);
         }
 
+        //Счета покупателя
         [HttpGet("{id}/invoices")]
         public async Task<IActionResult> GetInvoices([FromRoute] int id)
         {
@@ -57,6 +62,7 @@ namespace TimeSheets.Controllers
             return Ok(invoices);
         }
 
+        //
         [HttpPut("{id}/edit_profile_customer")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Customer customer)
         {

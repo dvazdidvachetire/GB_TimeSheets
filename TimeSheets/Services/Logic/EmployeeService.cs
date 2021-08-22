@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories;
@@ -34,30 +35,19 @@ namespace TimeSheets.Services.Logic
 
         public async Task<JobDto> GetJobEmployee(int id, int idJ)
         {
-            var jobsEmployee = await GetJobsEmployee(id);
-            var jobEmployee = await Task.Run(() => jobsEmployee.SingleOrDefault(j => j.Id == id));
-            return jobEmployee;
+            //var jobsEmployee = await GetJobsEmployee(id);
+            //var jobEmployee = await Task.Run(() => jobsEmployee.SingleOrDefault(j => j.Id == id));
+            //return jobEmployee;
+            return null;
         }
 
-        public async Task<IEnumerable<JobDto>> GetJobsEmployee(int id)
+        public async Task<IReadOnlyList<Job>> GetJobs(int id)
         {
-            if (_jobRepository is JobRepository jobRepository)
-            {
-                var jobsEmployee = await Task.Run(() => jobRepository.JobsDtos.Where(j => j.TimeSheet.EmployeeId == id));
-                return jobsEmployee;
-            }
-
-            return default;
+            var jobs = await _jobRepository.GetObjects();
+            return await Task.Run(() => jobs.Where(j => j.TimeSheet.EmployeeId == id).ToList());
         }
 
-        public async Task<Job> GetJob(int id)
-        {
-            var jobs = await GetJobs();
-            var job = await Task.Run(() => jobs.SingleOrDefault(j => j.Id == id));
-            return job;
-        }
-
-        public async Task<IEnumerable<Job>> GetJobs()
+        public async Task<IReadOnlyList<Job>> GetJobs()
         {
             return await _jobRepository.GetObjects();
         }
@@ -69,14 +59,10 @@ namespace TimeSheets.Services.Logic
 
         public async Task<JobDto> ChangeTimeSheet(int id, TimeSheet timeSheet)
         {
-            var job = await GetJob(id);
+            var jobs = await _jobRepository.GetObjects();
+            var job = await Task.Run(() => jobs.SingleOrDefault(j => j.Id == id));
 
             job.TimeSheet = timeSheet;
-
-            if (_jobRepository is JobRepository jobRepository)
-            {
-                await Task.Run(async () => jobRepository.JobsDtos.Add(await Map(job)));
-            }
 
             return await Map(job);
         }
@@ -88,15 +74,10 @@ namespace TimeSheets.Services.Logic
 
         private async Task<JobDto> Map(Job job)
         {
-            return await Task.Run(() =>
-                new JobDto
-                {
-                    CustomerId = job.CustomerId,
-                    Title = job.Title,
-                    Description = job.Description,
-                    Amount = job.Amount,
-                    TimeSheet = job.TimeSheet
-                });
+            var config = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Job, JobDto>()));
+            var mapper = config.CreateMapper();
+
+            return await Task.Run(() => mapper.Map<JobDto>(job));
         }
     }
 }

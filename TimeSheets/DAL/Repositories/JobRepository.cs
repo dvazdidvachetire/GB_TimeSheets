@@ -42,7 +42,7 @@ namespace TimeSheets.DAL.Repositories
         {
             try
             {
-                return await _context.Jobs.Where(j => j.IsDeleted == false).ToListAsync();
+                return await _context.Jobs.ToListAsync();
             }
             catch (Exception e)
             {

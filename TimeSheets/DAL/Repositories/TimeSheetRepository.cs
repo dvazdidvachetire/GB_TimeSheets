@@ -8,51 +8,48 @@ using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories.Context;
-using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Repositories
 {
-    internal sealed class ContractsRepository : IContractsRepository
+    public class TimeSheetRepository : ITimeSheetRepository
     {
         private readonly DbContextRepository _context;
 
-        public ContractsRepository(DbContextRepository context)
+        public TimeSheetRepository(DbContextRepository context)
         {
             _context = context;
         }
-        
-        public IList<ContractDto> ContractsDto { get; set; } = new List<ContractDto>();
 
-        public async Task<bool> CreateObjects(Contract contract)
+        public async Task<bool> CreateObjects(TimeSheet timeSheet)
         {
             try
             {
-                await _context.AddAsync(contract);
+                await _context.AddAsync(timeSheet);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
-                Debug.Write($"Ошибка! Ошибка! {e.Message}");
+                Debug.Write(e.Message);
                 return false;
             }
 
             return true;
         }
 
-        public async Task<IReadOnlyList<Contract>> GetObjects()
+        public async Task<IReadOnlyList<TimeSheet>> GetObjects()
         {
             try
             {
-                return await _context.Contracts.ToListAsync();
+                return await _context.TimeSheets.ToListAsync();
             }
             catch (Exception e)
             {
                 Debug.Write(e.Message);
-                return null;
+                return default;
             }
         }
 
-        public Task<bool> UpdateObjects(int id, Contract contract)
+        public Task<bool> UpdateObjects(int id, TimeSheet timeSheet)
         {
             return null;
         }

@@ -22,6 +22,7 @@ namespace TimeSheets.Controllers
             _employeeService = employeeService;
         }
 
+        //Регистрация сотрудника
         [HttpPost("register")]
         public async Task<IActionResult> Create([FromBody] Employee employee)
         {
@@ -29,27 +30,22 @@ namespace TimeSheets.Controllers
             return Ok(isRegistered);
         }
 
-        [HttpGet("{id}/completed_task/{idJ}")]
+        [HttpGet("{id}/task/{idJ}")]
         public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
         {
             var task = await _employeeService.GetJobEmployee(id, idJ);
             return Ok(task);
         }
 
-        [HttpGet("{id}/completed_tasks")]
-        public async Task<IActionResult> GetJobsEmployee([FromRoute] int id)
-        {
-            var tasks = await _employeeService.GetJobsEmployee(id);
-            return Ok(tasks);
-        }
-
-        [HttpGet("task/{id}")]
+        //Список задач сотрудника
+        [HttpGet("tasks/{id}")]
         public async Task<IActionResult> GetJob([FromRoute] int id)
         {
-            var task = await _employeeService.GetJob(id);
-            return Ok(task);
+            var jobs = await _employeeService.GetJobs(id);
+            return Ok(jobs);
         }
 
+        //Список всех задач
         [HttpGet("tasks")]
         public async Task<IActionResult> GetAllJobs()
         {
@@ -57,6 +53,7 @@ namespace TimeSheets.Controllers
             return Ok(tasks);
         }
 
+        //Меняет табель
         [HttpPut("task/{id}/timesheet")]
         public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
@@ -64,6 +61,7 @@ namespace TimeSheets.Controllers
             return Ok(taskDto);
         }
 
+        //Меняет профиль сотрудника
         [HttpPut("{id}/edit_profile_employee")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
@@ -71,6 +69,7 @@ namespace TimeSheets.Controllers
             return Ok(isChanged);
         }
 
+        //Удаляет профиль сотрудника
         [HttpDelete("{id}/delete_profile_employee")]
         public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
