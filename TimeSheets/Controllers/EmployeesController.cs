@@ -30,6 +30,14 @@ namespace TimeSheets.Controllers
             return Ok(isRegistered);
         }
 
+        //Создает табель
+        [HttpPost("task/timesheet")]
+        public async Task<IActionResult> CreateTimeSheet([FromBody] TimeSheet timeSheet)
+        {
+            var isCreated = await _employeeService.CreateTimeSheet(timeSheet);
+            return Ok(isCreated);
+        }
+
         [HttpGet("{id}/task/{idJ}")]
         public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
         {
@@ -51,14 +59,6 @@ namespace TimeSheets.Controllers
         {
             var tasks = await _employeeService.GetJobs();
             return Ok(tasks);
-        }
-
-        //Меняет табель
-        [HttpPut("task/{id}/timesheet")]
-        public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
-        {
-            var taskDto = await _employeeService.ChangeTimeSheet(id, timeSheet);
-            return Ok(taskDto);
         }
 
         //Меняет профиль сотрудника

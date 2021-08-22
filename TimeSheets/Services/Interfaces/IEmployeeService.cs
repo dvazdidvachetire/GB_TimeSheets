@@ -16,7 +16,7 @@ namespace TimeSheets.Services.Interfaces
         Task<IReadOnlyList<Job>> GetJobs(int id);
         Task<IReadOnlyList<Job>> GetJobs();
         Task<bool> ChangeEmployee(int id, Employee employee);
-        Task<JobDto> ChangeTimeSheet(int id, TimeSheet timeSheet);
+        Task<bool> CreateTimeSheet(TimeSheet timeSheet);
         Task<bool> DeleteEmployee(int id);
     }
 }
