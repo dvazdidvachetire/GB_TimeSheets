@@ -4,24 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TimeSheets.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Contracts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CustomerId = table.Column<int>(type: "integer", nullable: false),
-                    NumberContract = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contracts", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
@@ -65,19 +51,67 @@ namespace TimeSheets.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jobs",
+                name: "Contracts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    NumberContract = table.Column<int>(type: "integer", nullable: false),
+                    IsDelete = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contracts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contracts_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Jobs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: true),
                     Title = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    ContractId = table.Column<int>(type: "integer", nullable: true),
+                    InvoiceId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Contracts_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "Contracts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Invoices_InvoiceId",
+                        column: x => x.InvoiceId,
+                        principalTable: "Invoices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,8 +120,7 @@ namespace TimeSheets.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    JobId = table.Column<int>(type: "integer", nullable: false),
-                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    JobId = table.Column<int>(type: "integer", nullable: true),
                     FromTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -99,23 +132,50 @@ namespace TimeSheets.Migrations
                         column: x => x.JobId,
                         principalTable: "Jobs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contracts_CustomerId",
+                table: "Contracts",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_ContractId",
+                table: "Jobs",
+                column: "ContractId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_CustomerId",
+                table: "Jobs",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_EmployeeId",
+                table: "Jobs",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_InvoiceId",
+                table: "Jobs",
+                column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeSheets_JobId",
                 table: "TimeSheets",
-                column: "JobId",
-                unique: true);
+                column: "JobId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Contracts");
+                name: "TimeSheets");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Jobs");
+
+            migrationBuilder.DropTable(
+                name: "Contracts");
 
             migrationBuilder.DropTable(
                 name: "Employees");
@@ -124,10 +184,7 @@ namespace TimeSheets.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "TimeSheets");
-
-            migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "Customers");
         }
     }
 }

@@ -12,11 +12,11 @@ namespace TimeSheets.Services.Interfaces
     {
         Task<bool> RegisterEmployee(Employee employee);
         Task<IEnumerable<Employee>> GetAllEmployee();
-        Task<JobDto> GetJobEmployee(int id, int idJ);
-        Task<IReadOnlyList<Job>> GetJobs(int id);
+        Task<JobForEmployeeDto> GetJobEmployee(int id, int idJ);
+        Task<IReadOnlyList<JobForEmployeeDto>> GetJobs(int id);
         Task<IReadOnlyList<Job>> GetJobs();
         Task<bool> ChangeEmployee(int id, Employee employee);
-        Task<bool> CreateTimeSheet(TimeSheet timeSheet);
+        Task<bool> CreateTimeSheet(int idE, int idJ, TimeSheet timeSheet);
         Task<bool> DeleteEmployee(int id);
     }
 }

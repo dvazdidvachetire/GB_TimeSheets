@@ -49,7 +49,7 @@ namespace TimeSheets.Services.Logic
             var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == id));
 
             var jobs = await _jobRepository.GetObjects();
-            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.CustomerId == id));
+            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == id));
 
             var mc = await Task.Run( () => new MapperConfiguration(cfg => cfg.CreateMap<Contract, ContractDto>()
                 .ForMember(dest => dest.Customer, act => act.MapFrom(src => customer))

@@ -36,26 +36,32 @@ namespace TimeSheets.Services.Logic
             return await _employeesRepository.GetObjects();
         }
 
-        public async Task<JobDto> GetJobEmployee(int id, int idJ)
+        public async Task<JobForEmployeeDto> GetJobEmployee(int id, int idJ)
         {
-            //TODO: исправить!
-            var jobs = await _jobRepository.GetObjects();
-            var job = await Task.Run(() => jobs.SingleOrDefault(j => j.Id == id));
+            ////TODO: исправить!
+            //var jobs = await _jobRepository.GetObjects();
+            //var job = await Task.Run(() => jobs.SingleOrDefault(j => j.EmployeeId == id));
 
-            var timeSheets = await _timeSheetRepository.GetObjects();
-            var timeSheetsJob = await Task.Run(() => timeSheets.Where(t => t.JobId == id));
+            //var timeSheets = await _timeSheetRepository.GetObjects();
+            //var timeSheetsJob = await Task.Run(() => timeSheets.Where(t => t.JobId == idJ));
 
-            var config = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Job, JobDto>()
-                .ForMember(dest => dest.TimeSheet, act => act.MapFrom(src => timeSheetsJob))));
-            var mapper = config.CreateMapper();
+            //var config = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Job, JobDto>()
+            //    .ForMember(dest => dest.TimeSheet, act => act.MapFrom(src => timeSheetsJob))));
+            //var mapper = config.CreateMapper();
 
-            return await Task.Run(() => mapper.Map<JobDto>(job));
+            //return await Task.Run(() => mapper.Map<JobDto>(job));
+            return null;
         }
 
-        public async Task<IReadOnlyList<Job>> GetJobs(int id)
+        public async Task<IReadOnlyList<JobForEmployeeDto>> GetJobs(int id)
         {
             var jobs = await _jobRepository.GetObjects();
-            return await Task.Run(() => jobs.Where(j => j.TimeSheet.EmployeeId == id).ToList());
+            var jobsEmployee = await Task.Run(() => jobs.Where(j => j.Employee.Id == id).ToList());
+
+            var mc = await Task.Run(() => new MapperConfiguration(cfg => cfg.CreateMap<Job, JobForEmployeeDto>()));
+            var mapper = mc.CreateMapper();
+
+            return await Task.Run(() => mapper.Map<IList<Job>, IList<JobForEmployeeDto>>(jobsEmployee).ToList());
         }
 
         public async Task<IReadOnlyList<Job>> GetJobs()
@@ -68,9 +74,14 @@ namespace TimeSheets.Services.Logic
             return await _employeesRepository.UpdateObjects(id, employee);
         }
 
-        public async Task<bool> CreateTimeSheet(TimeSheet timeSheet)
+        public async Task<bool> CreateTimeSheet(int idE, int idJ, TimeSheet timeSheet)
         {
-             return await _timeSheetRepository.CreateObjects(timeSheet);
+            return await Task.Run(async () =>
+            {
+                timeSheet.Job.Id = idJ;
+                await _jobRepository.UpdateObjects(idJ, new Job { Employee = new Employee{ Id = idE } });
+                return await _timeSheetRepository.CreateObjects(timeSheet);
+            });
         }
 
         public async Task<bool> DeleteEmployee(int id)

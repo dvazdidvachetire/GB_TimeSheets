@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Models;
 
-namespace TimeSheets.DAL.Models
+namespace TimeSheets.DTO
 {
-    public class Job
+    public class JobForEmployeeDto
     {
         [JsonIgnore] public int Id { get; set; }
-        [JsonIgnore] public Customer Customer { get; set; }
-        [JsonIgnore] public Employee Employee { get; set; }
+        [JsonIgnore] public int CustomerId { get; set; }
+        [JsonIgnore] public int EmployeeId { get; set; }
+        public string NameCustomer { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
-        [JsonIgnore] public IList<TimeSheet> TimeSheets { get; set; }
+        public IList<TimeSheet> TimeSheets { get; set; }
     }
 }

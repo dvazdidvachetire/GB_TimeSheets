@@ -51,9 +51,19 @@ namespace TimeSheets.DAL.Repositories
             }
         }
 
-        public Task<bool> UpdateObjects(int id, Job job)
+        public async Task<bool> UpdateObjects(int id, Job job)
         {
-            return null;
+            try
+            {
+                var jobEmployee = await _context.Jobs.FindAsync(id);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+                return false;
+            }
         }
 
         public Task<bool> DeleteObjects(int id)

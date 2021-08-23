@@ -31,10 +31,10 @@ namespace TimeSheets.Controllers
         }
 
         //Создает табель
-        [HttpPost("task/timesheet")]
-        public async Task<IActionResult> CreateTimeSheet([FromBody] TimeSheet timeSheet)
+        [HttpPost("{idE}/task/{idJ}/timesheet")]
+        public async Task<IActionResult> CreateTimeSheet([FromRoute] int idE, [FromRoute] int idJ, [FromBody] TimeSheet timeSheet)
         {
-            var isCreated = await _employeeService.CreateTimeSheet(timeSheet);
+            var isCreated = await _employeeService.CreateTimeSheet(idE, idJ, timeSheet);
             return Ok(isCreated);
         }
 
@@ -46,7 +46,7 @@ namespace TimeSheets.Controllers
         }
 
         //Список задач сотрудника
-        [HttpGet("tasks/{id}")]
+        [HttpGet("{id}/tasks")]
         public async Task<IActionResult> GetJob([FromRoute] int id)
         {
             var jobs = await _employeeService.GetJobs(id);

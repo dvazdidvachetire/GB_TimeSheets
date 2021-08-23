@@ -92,7 +92,7 @@ namespace TimeSheets.Services.Logic
             var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == contract.CustomerId));
 
             var jobs = await _jobRepository.GetObjects();
-            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.CustomerId == contract.CustomerId));
+            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == contract.CustomerId));
 
             return await Task.Run(() => new ContractDto
             {
