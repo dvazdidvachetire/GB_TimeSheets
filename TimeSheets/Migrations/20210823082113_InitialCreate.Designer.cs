@@ -10,7 +10,7 @@ using TimeSheets.DAL.Repositories.Context;
 namespace TimeSheets.Migrations
 {
     [DbContext(typeof(DbContextRepository))]
-    [Migration("20210821094550_InitialCreate")]
+    [Migration("20210823082113_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,15 +109,10 @@ namespace TimeSheets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("TimeSheetId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TimeSheetId");
 
                     b.ToTable("Jobs");
                 });
@@ -135,20 +130,31 @@ namespace TimeSheets.Migrations
                     b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("JobId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("ToTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSheet");
+                    b.HasIndex("JobId")
+                        .IsUnique();
+
+                    b.ToTable("TimeSheets");
+                });
+
+            modelBuilder.Entity("TimeSheets.DAL.Models.TimeSheet", b =>
+                {
+                    b.HasOne("TimeSheets.DAL.Models.Job", null)
+                        .WithOne("TimeSheet")
+                        .HasForeignKey("TimeSheets.DAL.Models.TimeSheet", "JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Job", b =>
                 {
-                    b.HasOne("TimeSheets.DAL.Models.TimeSheet", "TimeSheet")
-                        .WithMany()
-                        .HasForeignKey("TimeSheetId");
-
                     b.Navigation("TimeSheet");
                 });
 #pragma warning restore 612, 618

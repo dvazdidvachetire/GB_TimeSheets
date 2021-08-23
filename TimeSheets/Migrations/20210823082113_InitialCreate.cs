@@ -65,21 +65,6 @@ namespace TimeSheets.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TimeSheet",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
-                    FromTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TimeSheet", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Jobs",
                 columns: table => new
                 {
@@ -88,24 +73,40 @@ namespace TimeSheets.Migrations
                     CustomerId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    TimeSheetId = table.Column<int>(type: "integer", nullable: true)
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TimeSheets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    JobId = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    FromTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TimeSheets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jobs_TimeSheet_TimeSheetId",
-                        column: x => x.TimeSheetId,
-                        principalTable: "TimeSheet",
+                        name: "FK_TimeSheets_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_TimeSheetId",
-                table: "Jobs",
-                column: "TimeSheetId");
+                name: "IX_TimeSheets_JobId",
+                table: "TimeSheets",
+                column: "JobId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -123,10 +124,10 @@ namespace TimeSheets.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "TimeSheets");
 
             migrationBuilder.DropTable(
-                name: "TimeSheet");
+                name: "Jobs");
         }
     }
 }
