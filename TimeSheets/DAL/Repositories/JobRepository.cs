@@ -55,7 +55,8 @@ namespace TimeSheets.DAL.Repositories
         {
             try
             {
-                var jobEmployee = await _context.Jobs.FindAsync(id);
+                var jobFinded = await _context.Jobs.FindAsync(id);
+                jobFinded = job;
                 await _context.SaveChangesAsync();
                 return true;
             }

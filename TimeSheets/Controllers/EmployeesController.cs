@@ -31,10 +31,10 @@ namespace TimeSheets.Controllers
         }
 
         //Создает табель
-        [HttpPost("{idE}/task/{idJ}/timesheet")]
-        public async Task<IActionResult> CreateTimeSheet([FromRoute] int idE, [FromRoute] int idJ, [FromBody] TimeSheet timeSheet)
+        [HttpPost("{idE}/task/{id}/create_timesheet")]
+        public async Task<IActionResult> CreateTimeSheet([FromRoute] int idE, [FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var isCreated = await _employeeService.CreateTimeSheet(idE, idJ, timeSheet);
+            var isCreated = await _employeeService.CreateTimeSheet(idE, id, timeSheet);
             return Ok(isCreated);
         }
 

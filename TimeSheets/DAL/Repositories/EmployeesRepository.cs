@@ -54,7 +54,7 @@ namespace TimeSheets.DAL.Repositories
             try
             {
                 var emp = await _context.Employees.FindAsync(id);
-                emp = employee;
+                emp.FullName = employee.FullName;
                 await _context.SaveChangesAsync();
                 return true;
             }

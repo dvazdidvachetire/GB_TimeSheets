@@ -22,10 +22,10 @@ namespace TimeSheets.Controllers
             _managerService = managerService;
         }
 
-        [HttpPost("job")]
-        public async Task<IActionResult> CreateJob([FromBody] Job job)
+        [HttpPost("customer/{id}/create_job")]
+        public async Task<IActionResult> CreateJob([FromRoute] int id, [FromBody] Job job)
         {
-            var isCreated = await _managerService.CreateJob(job);
+            var isCreated = await _managerService.CreateJob(id, job);
             return Ok(isCreated);
         }
 

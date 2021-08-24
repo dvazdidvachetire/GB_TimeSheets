@@ -10,8 +10,8 @@ using TimeSheets.DAL.Repositories.Context;
 namespace TimeSheets.Migrations
 {
     [DbContext(typeof(DbContextRepository))]
-    [Migration("20210823185026_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20210824125158_FirstMigrations")]
+    partial class FirstMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,16 +146,21 @@ namespace TimeSheets.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("JobId")
+                    b.Property<int>("JobId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ToTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("JobId");
 
@@ -198,11 +203,17 @@ namespace TimeSheets.Migrations
 
             modelBuilder.Entity("TimeSheets.DAL.Models.TimeSheet", b =>
                 {
-                    b.HasOne("TimeSheets.DAL.Models.Job", "Job")
-                        .WithMany("TimeSheets")
-                        .HasForeignKey("JobId");
+                    b.HasOne("TimeSheets.DAL.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
-                    b.Navigation("Job");
+                    b.HasOne("TimeSheets.DAL.Models.Job", null)
+                        .WithMany("TimeSheets")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>

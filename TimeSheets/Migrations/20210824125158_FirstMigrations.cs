@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TimeSheets.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class FirstMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -120,7 +120,8 @@ namespace TimeSheets.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    JobId = table.Column<int>(type: "integer", nullable: true),
+                    JobId = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: true),
                     FromTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -128,11 +129,17 @@ namespace TimeSheets.Migrations
                 {
                     table.PrimaryKey("PK_TimeSheets", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_TimeSheets_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_TimeSheets_Jobs_JobId",
                         column: x => x.JobId,
                         principalTable: "Jobs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -159,6 +166,11 @@ namespace TimeSheets.Migrations
                 name: "IX_Jobs_InvoiceId",
                 table: "Jobs",
                 column: "InvoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeSheets_EmployeeId",
+                table: "TimeSheets",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeSheets_JobId",
