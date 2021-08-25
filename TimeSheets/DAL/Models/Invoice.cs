@@ -10,7 +10,8 @@ namespace TimeSheets.DAL.Models
     public class Invoice
     {
         [JsonIgnore] public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public int CustomerIdI { get; set; }
+        [JsonIgnore] public Customer Customer { get; set; }
         public DateTimeOffset Date { get; set; }
         public IList<Job> Jobs { get; set; }
     }

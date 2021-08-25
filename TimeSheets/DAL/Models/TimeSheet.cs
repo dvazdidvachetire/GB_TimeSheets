@@ -11,7 +11,9 @@ namespace TimeSheets.DAL.Models
     public class TimeSheet
     {
         [JsonIgnore] public int Id { get; set; }
-        [JsonIgnore] public int JobId { get; set; }
+        [JsonIgnore] public int JobIdT { get; set; }
+        [JsonIgnore] public Job Job { get; set; }
+        public int EmployeeIdT { get; set; }
         [JsonIgnore] public Employee Employee { get; set; }
         public DateTimeOffset FromTime { get; set; }
         public DateTimeOffset ToTime { get; set; }

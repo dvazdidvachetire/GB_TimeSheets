@@ -29,15 +29,9 @@ namespace TimeSheets.Services.Logic
             _customersRepository = customersRepository;
         }
 
-        public async Task<bool> CreateJob(int id, Job job)
+        public async Task<bool> CreateJob(Job job)
         {
-            return await Task.Run(async () =>
-            {
-                var customers = await _customersRepository.GetObjects();
-                var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == id));
-                job.Customer = customer;
-                return await _jobRepository.CreateObjects(job);
-            });
+            return await _jobRepository.CreateObjects(job);
         }
 
         public async Task<bool> CreateContract(Contract contract)
@@ -95,16 +89,15 @@ namespace TimeSheets.Services.Logic
         private async Task<ContractDto> MapContract(Contract contract)
         {
             var customers = await _customersRepository.GetObjects();
-            var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == contract.CustomerId));
+            var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == contract.CustomerIdC));
 
             var jobs = await _jobRepository.GetObjects();
-            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == contract.CustomerId));
+            //var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == contract.CustomerId));
 
             return await Task.Run(() => new ContractDto
             {
                 NumberContract = contract.NumberContract,
-                Customer = customer,
-                Jobs = jobsCustomer
+                Customer = customer
             });
         }
 

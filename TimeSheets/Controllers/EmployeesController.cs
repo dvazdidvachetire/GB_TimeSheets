@@ -31,30 +31,30 @@ namespace TimeSheets.Controllers
         }
 
         //Создает табель
-        [HttpPost("{idE}/task/{id}/create_timesheet")]
-        public async Task<IActionResult> CreateTimeSheet([FromRoute] int idE, [FromRoute] int id, [FromBody] TimeSheet timeSheet)
+        [HttpPost("job/{id}/create_timesheet")]
+        public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var isCreated = await _employeeService.CreateTimeSheet(idE, id, timeSheet);
+            var isCreated = await _employeeService.CreateTimeSheet(id, timeSheet);
             return Ok(isCreated);
         }
 
-        [HttpGet("{id}/task/{idJ}")]
+        [HttpGet("{id}/completed_job/{idJob}")]
         public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
         {
-            var task = await _employeeService.GetJobEmployee(id, idJ);
+            var task = await _employeeService.GetCompletedJob(id, idJ);
             return Ok(task);
         }
 
         //Список задач сотрудника
-        [HttpGet("{id}/tasks")]
+        [HttpGet("{id}/completed_jobs")]
         public async Task<IActionResult> GetJob([FromRoute] int id)
         {
-            var jobs = await _employeeService.GetJobs(id);
+            var jobs = await _employeeService.GetCompletedJobs(id);
             return Ok(jobs);
         }
 
         //Список всех задач
-        [HttpGet("tasks")]
+        [HttpGet("jobs")]
         public async Task<IActionResult> GetAllJobs()
         {
             var tasks = await _employeeService.GetJobs();

@@ -11,8 +11,9 @@ namespace TimeSheets.DTO
     public class TimeSheetDto
     {
         [JsonIgnore] public int Id { get; set; }
-        [JsonIgnore] public int JobId { get; set; }
+        [JsonIgnore] public int JobIdT { get; set; }
         public string EmployeeName { get; set; }
+        [JsonIgnore] public int EmployeeIdT { get; set; }
         public DateTimeOffset FromTime { get; set; }
         public DateTimeOffset ToTime { get; set; }
     }

@@ -14,7 +14,6 @@ namespace TimeSheets.DAL.Repositories
 {
     internal sealed class JobRepository : IJobRepository
     {
-        public IList<JobDto> JobsDtos { get; set; } = new List<JobDto>();
         private readonly DbContextRepository _context;
 
         public JobRepository(DbContextRepository context)

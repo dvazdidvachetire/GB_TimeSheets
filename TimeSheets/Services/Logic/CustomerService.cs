@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
-using TimeSheets.DAL.Repositories;
 using TimeSheets.DTO;
 using TimeSheets.Services.Interfaces;
 
@@ -49,11 +48,10 @@ namespace TimeSheets.Services.Logic
             var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == id));
 
             var jobs = await _jobRepository.GetObjects();
-            var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == id));
+            //var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == id));
 
             var mc = await Task.Run( () => new MapperConfiguration(cfg => cfg.CreateMap<Contract, ContractDto>()
-                .ForMember(dest => dest.Customer, act => act.MapFrom(src => customer))
-                .ForMember(dest => dest.Jobs, act => act.MapFrom(src => jobsCustomer))));
+                .ForMember(dest => dest.Customer, act => act.MapFrom(src => customer))));
             var mapper = mc.CreateMapper();
 
             return await Task.Run(() => mapper.Map<ContractDto>(contract));
@@ -62,7 +60,7 @@ namespace TimeSheets.Services.Logic
         public async Task<IReadOnlyList<Contract>> GetContractsCustomer(int id)
         {
             var contracts = await _contractsRepository.GetObjects();
-            return await Task.Run(() => contracts.Where(c => c.CustomerId == id).ToList());
+            return await Task.Run(() => contracts.Where(c => c.CustomerIdC == id).ToList());
         }
 
         public async Task<InvoiceDto> GetInvoiceCustomer(int id, int idI)
@@ -76,7 +74,7 @@ namespace TimeSheets.Services.Logic
         public async Task<IReadOnlyList<Invoice>> GetInvoicesCustomer(int id)
         {
             var invoices = await _invoicesRepository.GetObjects();
-            return await Task.Run(() => invoices.Where(i => i.CustomerId == id).ToList());
+            return await Task.Run(() => invoices.Where(i => i.CustomerIdI == id).ToList());
         }
 
         public async Task<bool> ChangeCustomer(int id, Customer customer)

@@ -26,7 +26,10 @@ namespace TimeSheets.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CustomerIdC")
                         .HasColumnType("integer");
 
                     b.Property<int>("IsDelete")
@@ -85,13 +88,18 @@ namespace TimeSheets.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CustomerIdI")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invoices");
                 });
@@ -112,8 +120,14 @@ namespace TimeSheets.Migrations
                     b.Property<int?>("CustomerId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("CustomerIdJ")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
+
+                    b.Property<int>("EmployeeIDJ")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("integer");
@@ -147,10 +161,16 @@ namespace TimeSheets.Migrations
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("EmployeeIdT")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("JobId")
+                    b.Property<int?>("JobId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("JobIdT")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("ToTime")
@@ -167,11 +187,16 @@ namespace TimeSheets.Migrations
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>
                 {
+                    b.HasOne("TimeSheets.DAL.Models.Customer", null)
+                        .WithMany("Contracts")
+                        .HasForeignKey("CustomerId");
+                });
+
+            modelBuilder.Entity("TimeSheets.DAL.Models.Invoice", b =>
+                {
                     b.HasOne("TimeSheets.DAL.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Invoices")
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Customer");
                 });
@@ -187,7 +212,7 @@ namespace TimeSheets.Migrations
                         .HasForeignKey("CustomerId");
 
                     b.HasOne("TimeSheets.DAL.Models.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("Jobs")
                         .HasForeignKey("EmployeeId");
 
                     b.HasOne("TimeSheets.DAL.Models.Invoice", null)
@@ -205,16 +230,28 @@ namespace TimeSheets.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("TimeSheets.DAL.Models.Job", null)
+                    b.HasOne("TimeSheets.DAL.Models.Job", "Job")
                         .WithMany("TimeSheets")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobId");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>
+                {
+                    b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("TimeSheets.DAL.Models.Customer", b =>
+                {
+                    b.Navigation("Contracts");
+
+                    b.Navigation("Invoices");
+                });
+
+            modelBuilder.Entity("TimeSheets.DAL.Models.Employee", b =>
                 {
                     b.Navigation("Jobs");
                 });
