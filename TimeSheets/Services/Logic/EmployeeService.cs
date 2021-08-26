@@ -49,10 +49,10 @@ namespace TimeSheets.Services.Logic
             var employeeTimeSheets = await Task.Run(() => timeSheets.Join(employee,
                 t => t.EmployeeIdT,
                 e => e.Id,
-                (timeSheet, employee)
+                (timeSheet, empl)
                     => 
                 {
-                    timeSheet.Employee = employee;
+                    timeSheet.Employee = empl;
                     return mapper.Map<TimeSheetDto>(timeSheet);
                 }).ToList());
 
@@ -71,10 +71,9 @@ namespace TimeSheets.Services.Logic
                     return dto;
                 }).ToList());
 
-            return await Task.Run(async () => 
-                   await Task.Run(() =>  jobsEmployee.Where(j => j.TimeSheets.Select(j => j.EmployeeIdT)
+            return await Task.Run(() =>  jobsEmployee.Where(j => j.TimeSheets.Select(j => j.EmployeeIdT)
                                                                                                .Contains(id))
-                                                                                               .ToList()));
+                                                                                               .ToList());
         }
 
         public async Task<IReadOnlyList<JobDto>> GetJobs()

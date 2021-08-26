@@ -13,7 +13,7 @@ namespace TimeSheets.DAL.Repositories
 {
     internal sealed class CustomersRepository : ICustomersRepository
     {
-        private DbContextRepository _context;
+        private readonly DbContextRepository _context;
 
         public CustomersRepository(DbContextRepository context)
         {

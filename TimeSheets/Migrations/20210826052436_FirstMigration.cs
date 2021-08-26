@@ -43,9 +43,10 @@ namespace TimeSheets.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerIdC = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    JobIdC = table.Column<int>(type: "integer", nullable: false),
                     NumberContract = table.Column<int>(type: "integer", nullable: false),
-                    IsDelete = table.Column<int>(type: "integer", nullable: false),
-                    CustomerId = table.Column<int>(type: "integer", nullable: true)
+                    IsDelete = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -39,9 +39,9 @@ namespace TimeSheets.Controllers
         }
 
         [HttpGet("{id}/completed_job/{idJob}")]
-        public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
+        public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJob)
         {
-            var task = await _employeeService.GetCompletedJob(id, idJ);
+            var task = await _employeeService.GetCompletedJob(id, idJob);
             return Ok(task);
         }
 

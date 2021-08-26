@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Routing.Constraints;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories;
@@ -17,16 +19,22 @@ namespace TimeSheets.Services.Logic
         private readonly IContractsRepository _contractsRepository;
         private readonly IInvoicesRepository _invoicesRepository;
         private readonly ICustomersRepository _customersRepository;
+        private readonly ITimeSheetRepository _timeSheetRepository;
+        private readonly IEmployeesRepository _employeesRepository;
 
         public ManagerService(IJobRepository jobRepository,
             IContractsRepository contractsRepository,
             IInvoicesRepository invoicesRepository,
-            ICustomersRepository customersRepository)
+            ICustomersRepository customersRepository,
+            ITimeSheetRepository timeSheetRepository,
+            IEmployeesRepository employeesRepository)
         {
             _jobRepository = jobRepository;
             _contractsRepository = contractsRepository;
             _invoicesRepository = invoicesRepository;
             _customersRepository = customersRepository;
+            _timeSheetRepository = timeSheetRepository;
+            _employeesRepository = employeesRepository;
         }
 
         public async Task<bool> CreateJob(Job job)
@@ -36,88 +44,120 @@ namespace TimeSheets.Services.Logic
 
         public async Task<bool> CreateContract(Contract contract)
         {
-            if (_contractsRepository is ContractsRepository repository)
-            {
-                await Task.Run(async () => repository.ContractsDto.Add(await MapContract(contract)));
-            }
-
             return await _contractsRepository.CreateObjects(contract);
         }
 
         public async Task<bool> CreateInvoice(Invoice invoice)
         {
-            if (_invoicesRepository is InvoicesRepository repository)
-            {
-                await Task.Run(async () => repository.InvoicesDtos.Add(await MapInvoice(invoice)));
-            }
-
             return await _invoicesRepository.CreateObjects(invoice);
         }
 
-        public async Task<IEnumerable<Contract>> GetContracts()
+        public async Task<IReadOnlyList<Contract>> GetContracts()
         {
             return await _contractsRepository.GetObjects();
         }
 
-        public async Task<IEnumerable<Invoice>> GetInvoices()
+        public async Task<IReadOnlyList<Invoice>> GetInvoices()
         {
             return await _invoicesRepository.GetObjects();
         }
 
-        public async Task<IEnumerable<ContractDto>> GetContractsCustomer(int id)
+        public async Task<ContractDto> GetContractCustomer(int id)
         {
-            if (_contractsRepository is ContractsRepository repository)
-            {
-                var contracts = await Task.Run(() => repository.ContractsDto.Where(c => c.Id == id));
-                return contracts;
-            }
-
-            return default;
-        }
-
-        public async Task<IEnumerable<InvoiceDto>> GetInvoicesCustomer(int id)
-        {
-            if (_invoicesRepository is InvoicesRepository repository)
-            {
-                var invoices = await Task.Run(() => repository.InvoicesDtos.Where(i => i.Id == id));
-                return invoices;
-            }
-
-            return default;
-        }
-
-        private async Task<ContractDto> MapContract(Contract contract)
-        {
+            var contracts = await GetContracts();
             var customers = await _customersRepository.GetObjects();
-            var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == contract.CustomerIdC));
+
+            var mapper = await MapperConfiguration();
+
+            var contractsWithCustomers = await Task.Run(() => contracts.Join(customers,
+                c => c.CustomerIdC,
+                c => c.Id,
+                (contract, customer) =>
+                {
+                    contract.Customer = customer;
+                    return Task.Run(() => mapper.Map(contract, contract)).GetAwaiter().GetResult();
+                }
+                ));
 
             var jobs = await _jobRepository.GetObjects();
-            //var jobsCustomer = await Task.Run(() => jobs.Where(j => j.Customer.Id == contract.CustomerId));
 
-            return await Task.Run(() => new ContractDto
-            {
-                NumberContract = contract.NumberContract,
-                Customer = customer
-            });
+            return await Task.Run(() => contractsWithCustomers.GroupJoin(jobs,
+                c => c.Id,
+                j => j.CustomerIdJ,
+                (contract, js) =>
+                {
+                    var result = Task.Run(() => mapper.Map<ContractDto>(contract)).GetAwaiter().GetResult();
+                    result.Jobs = js;
+                    return result;
+                }).SingleOrDefault(c => c.Id == id));
         }
 
-        private async Task<InvoiceDto> MapInvoice(Invoice invoice)
+        public async Task<InvoiceDto> GetInvoiceCustomer(int id)
         {
-            //var customers = await _customersRepository.GetObjects();
-            //var customer = await Task.Run(() => customers.SingleOrDefault(c => c.Id == invoice.CustomerId));
+            var invoices = await GetInvoices();
+            var customers = await _customersRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjects();
+            var timeSheets = await _timeSheetRepository.GetObjects();
+            var employees = await _employeesRepository.GetObjects();
 
-            //var jobs = await Task.Run(() => (_jobRepository is JobRepository jobRepository) ? jobRepository.JobsDtos : default);
-            //var completedJobs = await Task.Run(() => jobs.Where(j => j.Customer.Id == invoice.CustomerId));
-            //var totalSum = completedJobs.Sum(j => j.Amount);
+            var mapper = await MapperConfiguration();
 
-            //return await Task.Run(() => new InvoiceDto
-            //{
-            //    Id = invoice.Id,
-            //    Customer = customer,
-            //    Jobs = completedJobs,
-            //    TotalSum = totalSum
-            //});
-            return null;
+            var timeSheetsWithEmployees = await Task.Run(() => timeSheets.Join(employees,
+                t => t.EmployeeIdT,
+                e => e.Id,
+                (ts, empl) =>
+                {
+                    ts.Employee = empl;
+                    return Task.Run(() => mapper.Map<TimeSheetDto>(ts)).GetAwaiter().GetResult();
+                }));
+
+            var invoicesWithCustomers = await Task.Run(() => invoices.Join(customers,
+                i => i.CustomerIdI,
+                c => c.Id,
+                (invoice, customer) =>
+                {
+                    invoice.Customer = customer;
+                    return Task.Run(() => mapper.Map(invoice, invoice))
+                        .GetAwaiter()
+                        .GetResult();
+                }));
+
+            var jobsWithTimeSheets = await Task.Run(() => jobs.GroupJoin(timeSheetsWithEmployees,
+                j => j.Id,
+                c => c.JobIdT,
+                (job, ts)
+                    =>
+                {
+                    var dto = Task.Run(() => mapper.Map<JobCustomerDto>(job)).GetAwaiter().GetResult();
+                    dto.TimeSheets = ts.ToList();
+                    return dto;
+                }));
+
+            return await Task.Run(() => invoicesWithCustomers.GroupJoin(jobsWithTimeSheets,
+                i => i.CustomerIdI,
+                j => j.CustomerIdJ,
+                (invoice, jobs) =>
+                {
+                    var dto = Task.Run(() => mapper.Map<InvoiceDto>(invoice)).GetAwaiter().GetResult();
+                    dto.Jobs = jobs.ToList();
+                    dto.TotalSum = Task.Run(() => dto.Jobs.Select(j => j.Amount).Sum()).GetAwaiter().GetResult();
+                    return dto;
+                }).SingleOrDefault(i => i.Id == id));
+        }
+
+        private async Task<IMapper> MapperConfiguration()
+        {
+            var mc = await Task.Run(() => new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Contract, ContractDto>()
+                    .ForMember(dest => dest.CustomerFullName, act => act.MapFrom(src => src.Customer.FullName));
+                cfg.CreateMap<Invoice, InvoiceDto>()
+                    .ForMember(dest => dest.CustomerFullName, act => act.MapFrom(src => src.Customer.FullName));
+                cfg.CreateMap<TimeSheet, TimeSheetDto>()
+                    .ForMember(dest => dest.EmployeeName, act => act.MapFrom(src => src.Employee.FullName));
+                cfg.CreateMap<Job, JobCustomerDto>();
+            }));
+            return mc.CreateMapper();
         }
     }
 }

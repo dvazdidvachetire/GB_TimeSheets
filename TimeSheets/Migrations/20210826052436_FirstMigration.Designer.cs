@@ -10,7 +10,7 @@ using TimeSheets.DAL.Repositories.Context;
 namespace TimeSheets.Migrations
 {
     [DbContext(typeof(DbContextRepository))]
-    [Migration("20210825164901_FirstMigration")]
+    [Migration("20210826052436_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace TimeSheets.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("IsDelete")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("JobIdC")
                         .HasColumnType("integer");
 
                     b.Property<int>("NumberContract")
@@ -189,9 +192,11 @@ namespace TimeSheets.Migrations
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>
                 {
-                    b.HasOne("TimeSheets.DAL.Models.Customer", null)
+                    b.HasOne("TimeSheets.DAL.Models.Customer", "Customer")
                         .WithMany("Contracts")
                         .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Invoice", b =>

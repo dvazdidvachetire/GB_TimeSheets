@@ -29,32 +29,32 @@ namespace TimeSheets.Controllers
             return Ok(isCreated);
         }
 
-        [HttpPost("contract")]
+        [HttpPost("create_contract")]
         public async Task<IActionResult> CreateContract([FromBody] Contract contract)
         {
             var isCreated = await _managerService.CreateContract(contract);
             return Ok(isCreated);
         }
 
-        [HttpPost("invoice")]
+        [HttpPost("create_invoice")]
         public async Task<IActionResult> CreateInvoice([FromBody] Invoice invoice)
         {
             var isCreated = await _managerService.CreateInvoice(invoice);
             return Ok(isCreated);
         }
 
-        [HttpGet("{id}/customer_contracts")]
+        [HttpGet("{id}/customer_contract")]
         public async Task<IActionResult> GetContractsById([FromRoute] int id)
         {
-            var contracts = await _managerService.GetContractsCustomer(id);
-            return Ok(contracts);
+            var contract = await _managerService.GetContractCustomer(id);
+            return Ok(contract);
         }
 
-        [HttpGet("{id}/customer_invoices")]
+        [HttpGet("{id}/customer_invoice")]
         public async Task<IActionResult> GetInvoicesById([FromRoute] int id)
         {
-            var invoices = await _managerService.GetInvoicesCustomer(id);
-            return Ok(invoices);
+            var invoice = await _managerService.GetInvoiceCustomer(id);
+            return Ok(invoice);
         }
 
         [HttpGet("contracts")]

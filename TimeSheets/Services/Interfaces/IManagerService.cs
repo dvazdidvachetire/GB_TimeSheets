@@ -13,9 +13,9 @@ namespace TimeSheets.Services.Interfaces
         Task<bool> CreateJob(Job job);
         Task<bool> CreateContract(Contract contract);
         Task<bool> CreateInvoice(Invoice invoice);
-        Task<IEnumerable<Contract>> GetContracts();
-        Task<IEnumerable<Invoice>> GetInvoices();
-        Task<IEnumerable<ContractDto>> GetContractsCustomer(int id);
-        Task<IEnumerable<InvoiceDto>> GetInvoicesCustomer(int id);
+        Task<IReadOnlyList<Contract>> GetContracts();
+        Task<IReadOnlyList<Invoice>> GetInvoices();
+        Task<ContractDto> GetContractCustomer(int id);
+        Task<InvoiceDto> GetInvoiceCustomer(int id);
     }
 }

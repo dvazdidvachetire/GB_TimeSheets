@@ -13,6 +13,6 @@ namespace TimeSheets.DAL.Models
         public int CustomerIdI { get; set; }
         [JsonIgnore] public Customer Customer { get; set; }
         public DateTimeOffset Date { get; set; }
-        public IList<Job> Jobs { get; set; }
+        [JsonIgnore] public IList<Job> Jobs { get; set; }
     }
 }

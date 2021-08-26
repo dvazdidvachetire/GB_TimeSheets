@@ -12,10 +12,10 @@ namespace TimeSheets.Services.Interfaces
     {
         Task<bool> RegisterCustomer(Customer customer);
         Task<IReadOnlyList<Customer>> GetCustomers();
-        Task<ContractDto> GetContractCustomer(int id, int idC);
-        Task<IReadOnlyList<Contract>> GetContractsCustomer(int id);
-        Task<InvoiceDto> GetInvoiceCustomer(int id, int idI);
-        Task<IReadOnlyList<Invoice>> GetInvoicesCustomer(int id);
+        Task<ContractDto> GetContractCustomer(int id);
+        Task<IReadOnlyList<Contract>> GetContracts(int id);
+        Task<InvoiceDto> GetInvoiceCustomer(int id);
+        Task<IReadOnlyList<Invoice>> GetInvoices(int id);
         Task<bool> ChangeCustomer(int id, Customer customer);
         Task<bool> DeleteCustomer(int id);
     }

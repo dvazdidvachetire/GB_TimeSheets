@@ -11,9 +11,9 @@ namespace TimeSheets.DTO
 {
     public class InvoiceDto
     {
-        [JsonIgnore] public int Id { get; set; }
-        public Customer Customer { get; set; }
-        public IEnumerable<JobDto> Jobs { get; set; }
+        public int Id { get; set; }
+        public string CustomerFullName { get; set; }
+        public IReadOnlyList<JobCustomerDto> Jobs { get; set; }
         public decimal TotalSum { get; set; }
     }
 }

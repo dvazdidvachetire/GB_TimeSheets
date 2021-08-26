@@ -31,10 +31,10 @@ namespace TimeSheets.Controllers
         }
 
         
-        [HttpGet("{id}/contract/{idC}")]
-        public async Task<IActionResult> GetContract([FromRoute] int id, [FromRoute] int idC)
+        [HttpGet("contract/{id}")]
+        public async Task<IActionResult> GetContract([FromRoute] int id)
         {
-            var contract = await _customerService.GetContractCustomer(id, idC);
+            var contract = await _customerService.GetContractCustomer(id);
             return Ok(contract);
         }
 
@@ -42,15 +42,15 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/contracts")]
         public async Task<IActionResult> GetContracts([FromRoute] int id)
         {
-            var contracts = await _customerService.GetContractsCustomer(id);
+            var contracts = await _customerService.GetContracts(id);
             return Ok(contracts);
         }
 
         
-        [HttpGet("{id}/invoice/{idI}")]
-        public async Task<IActionResult> GetInvoice([FromRoute] int id, [FromRoute] int idI)
+        [HttpGet("invoice/{id}")]
+        public async Task<IActionResult> GetInvoice([FromRoute] int id)
         {
-            var invoice = await _customerService.GetInvoiceCustomer(id, idI);
+            var invoice = await _customerService.GetInvoiceCustomer(id);
             return Ok(invoice);
         }
 
@@ -58,7 +58,7 @@ namespace TimeSheets.Controllers
         [HttpGet("{id}/invoices")]
         public async Task<IActionResult> GetInvoices([FromRoute] int id)
         {
-            var invoices = await _customerService.GetInvoicesCustomer(id);
+            var invoices = await _customerService.GetInvoices(id);
             return Ok(invoices);
         }
 

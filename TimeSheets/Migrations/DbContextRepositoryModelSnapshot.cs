@@ -35,6 +35,9 @@ namespace TimeSheets.Migrations
                     b.Property<int>("IsDelete")
                         .HasColumnType("integer");
 
+                    b.Property<int>("JobIdC")
+                        .HasColumnType("integer");
+
                     b.Property<int>("NumberContract")
                         .HasColumnType("integer");
 
@@ -187,9 +190,11 @@ namespace TimeSheets.Migrations
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>
                 {
-                    b.HasOne("TimeSheets.DAL.Models.Customer", null)
+                    b.HasOne("TimeSheets.DAL.Models.Customer", "Customer")
                         .WithMany("Contracts")
                         .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Invoice", b =>
