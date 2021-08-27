@@ -62,7 +62,6 @@ namespace TimeSheets.Controllers
             return Ok(invoices);
         }
 
-        //
         [HttpPut("{id}/edit_profile_customer")]
         public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Customer customer)
         {
