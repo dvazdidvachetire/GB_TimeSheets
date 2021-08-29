@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
@@ -12,6 +13,7 @@ using TimeSheets.Services.Interfaces;
 namespace TimeSheets.Controllers
 {
     [Route("api/customer")]
+    [Authorize]
     [ApiController]
     public class CustomersController : ControllerBase
     {

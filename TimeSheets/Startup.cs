@@ -132,6 +132,13 @@ namespace TimeSheets
 
             app.UseRouting();
 
+            app.UseCors(_ => _.SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -13,7 +13,7 @@ namespace TimeSheets.Services.Auth
 {
     public sealed class AuthService : IAuthService
     {
-        private IDictionary<string, string> _customers = new Dictionary<string, string>();
+        private IDictionary<string, string> _customers = new Dictionary<string, string>(){ {"test", "test"} };
         public const string SecretCode = "printer printer printer printer printer printer printer printer printer printer printer";
 
         public async Task<string> Authenticate(string user, string password)
