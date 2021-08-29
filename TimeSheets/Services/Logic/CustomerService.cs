@@ -7,7 +7,6 @@ using AutoMapper;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-using TimeSheets.Services.Auth.Responses;
 using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Services.Logic

@@ -25,12 +25,31 @@ namespace TimeSheets.Controllers
         {
             var token = await _authService.Authenticate(user, password);
 
-            if (string.IsNullOrWhiteSpace(token))
+            if (token is null)
             {
                 return await Task.Run(() => BadRequest(new { message = "Username or password is incorrect" }));
             }
 
+            await _authService.SetTokenCookie(token.RefreshToken, Response);
+
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> Refresh()
+        {
+            var oldRefreshToken = Request.Cookies["refreshToken"];
+            var newRefreshToken = await _authService.RefreshToken(oldRefreshToken);
+
+            if (string.IsNullOrWhiteSpace(newRefreshToken))
+            {
+                return Unauthorized(new {message = "Invalid token"});
+            }
+
+            await _authService.SetTokenCookie(newRefreshToken, Response);
+
+            return Ok(newRefreshToken);
         }
     }
 }

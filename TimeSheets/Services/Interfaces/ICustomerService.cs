@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-using TimeSheets.Services.Auth.Responses;
 
 namespace TimeSheets.Services.Interfaces
 {

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TimeSheets.Services.Auth.Responses;
+using Microsoft.AspNetCore.Http;
+using TimeSheets.DAL.Models;
 
 namespace TimeSheets.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> Authenticate(string user, string password);
+        Task<TokenResponse> Authenticate(string user, string password);
+        Task<string> RefreshToken(string token);
+        Task SetTokenCookie(string token, HttpResponse response);
     }
 }

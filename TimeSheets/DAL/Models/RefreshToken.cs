@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Services.Auth.Responses
+namespace TimeSheets.DAL.Models
 {
-    public sealed class TokenResponse
+    public sealed class RefreshToken
     {
         public string Token { get; set; }
-        public string RefreshToken { get; set; }
+        public DateTime Expires { get; set; }
+        public bool IsExpired => DateTime.UtcNow >= Expires;
     }
 }
