@@ -26,14 +26,13 @@ namespace TimeSheets.DAL.Repositories
             {
                 await _context.AddAsync(employee);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.Write($"Ошибка! Ошибка! {e.Message}");
                 return false;
             }
-
-            return true;
         }
 
         public async Task<IReadOnlyList<Employee>> GetObjects()

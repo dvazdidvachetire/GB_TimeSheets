@@ -16,6 +16,6 @@ namespace TimeSheets.DAL.Models
         [JsonIgnore] public int JobIdC { get; set; }
         public int NumberContract { get; set; }
         [JsonIgnore] public IList<Job> Jobs { get; set; }
-        [JsonIgnore] public int IsDelete { get; set; }
+        [JsonIgnore] public bool IsDelete { get; set; }
     }
 }

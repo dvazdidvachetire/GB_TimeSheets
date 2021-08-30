@@ -8,39 +8,38 @@ using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.DAL.Repositories.Context;
-using TimeSheets.DTO;
 
 namespace TimeSheets.DAL.Repositories
 {
-    internal sealed class JobRepository : IJobRepository
+    public sealed class UserRepository : IUserRepository
     {
         private readonly DbContextRepository _context;
 
-        public JobRepository(DbContextRepository context)
+        public UserRepository(DbContextRepository context)
         {
             _context = context;
         }
 
-        public async Task<bool> CreateObjects(Job job)
+        public async Task<bool> CreateObjects(User user)
         {
             try
             {
-                await _context.AddAsync(job);
+                await _context.AddAsync(user);
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
             {
-                Debug.Write($"Error! Error! {e.Message}");
+                Debug.Write(e.Message);
                 return false;
             }
         }
 
-        public async Task<IReadOnlyList<Job>> GetObjects()
+        public async Task<IReadOnlyList<User>> GetObjects()
         {
             try
             {
-                return await _context.Jobs.Where(j => j.IsDeleted == false).ToListAsync();
+                return await _context.Users.ToListAsync();
             }
             catch (Exception e)
             {
@@ -49,25 +48,14 @@ namespace TimeSheets.DAL.Repositories
             }
         }
 
-        public async Task<bool> UpdateObjects(int id, Job job)
+        public Task<bool> UpdateObjects(int id, User user)
         {
-            try
-            {
-                var jobFound = await _context.Jobs.FindAsync(id);
-                jobFound = job;
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.Write(e.Message);
-                return false;
-            }
+            throw new NotImplementedException();
         }
 
         public Task<bool> DeleteObjects(int id)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

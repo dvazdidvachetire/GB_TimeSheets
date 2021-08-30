@@ -32,8 +32,8 @@ namespace TimeSheets.Migrations
                     b.Property<int>("CustomerIdC")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IsDelete")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("JobIdC")
                         .HasColumnType("integer");
@@ -100,6 +100,9 @@ namespace TimeSheets.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
@@ -129,14 +132,17 @@ namespace TimeSheets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("EmployeeIDJ")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("EmployeeId")
+                    b.Property<int>("EmployeeIdJ")
                         .HasColumnType("integer");
 
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
@@ -170,6 +176,9 @@ namespace TimeSheets.Migrations
                     b.Property<DateTimeOffset>("FromTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<int?>("JobId")
                         .HasColumnType("integer");
 
@@ -186,6 +195,27 @@ namespace TimeSheets.Migrations
                     b.HasIndex("JobId");
 
                     b.ToTable("TimeSheets");
+                });
+
+            modelBuilder.Entity("TimeSheets.DAL.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Login")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TimeSheets.DAL.Models.Contract", b =>

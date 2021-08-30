@@ -13,11 +13,12 @@ namespace TimeSheets.DAL.Models
         [JsonIgnore] public int Id { get; set; }
         public int CustomerIdJ { get; set; }
         [JsonIgnore] public Customer Customer { get; set; }
-        [JsonIgnore] public int EmployeeIDJ { get; set; }
+        [JsonIgnore] public int EmployeeIdJ { get; set; }
         [JsonIgnore] public Employee Employee { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
         [JsonIgnore] public IList<TimeSheet> TimeSheets { get; set; }
+        [JsonIgnore] public bool IsDeleted { get; set; }
     }
 }

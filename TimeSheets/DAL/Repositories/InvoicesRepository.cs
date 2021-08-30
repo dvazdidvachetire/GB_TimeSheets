@@ -14,7 +14,6 @@ namespace TimeSheets.DAL.Repositories
 {
     internal sealed class InvoicesRepository : IInvoicesRepository
     {
-        public IList<InvoiceDto> InvoicesDtos { get; set; } = new List<InvoiceDto>();
         private readonly DbContextRepository _context;
 
         public InvoicesRepository(DbContextRepository context)
@@ -28,21 +27,20 @@ namespace TimeSheets.DAL.Repositories
             {
                 await _context.AddAsync(invoice);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.Write($"Error! Error! {e.Message}");
                 return false;
             }
-
-            return true;
         }
 
         public async Task<IReadOnlyList<Invoice>> GetObjects()
         {
             try
             {
-                return await _context.Invoices.ToListAsync();
+                return await _context.Invoices.Where(i => i.IsDeleted == false).ToListAsync();
             }
             catch (Exception e)
             {

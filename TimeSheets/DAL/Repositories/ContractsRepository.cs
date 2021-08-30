@@ -21,29 +21,26 @@ namespace TimeSheets.DAL.Repositories
             _context = context;
         }
         
-        public IList<ContractDto> ContractsDto { get; set; } = new List<ContractDto>();
-
         public async Task<bool> CreateObjects(Contract contract)
         {
             try
             {
                 await _context.AddAsync(contract);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.Write($"Ошибка! Ошибка! {e.Message}");
                 return false;
             }
-
-            return true;
         }
 
         public async Task<IReadOnlyList<Contract>> GetObjects()
         {
             try
             {
-                return await _context.Contracts.ToListAsync();
+                return await _context.Contracts.Where(c => c.IsDelete == false).ToListAsync();
             }
             catch (Exception e)
             {

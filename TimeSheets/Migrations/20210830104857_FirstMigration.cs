@@ -37,6 +37,21 @@ namespace TimeSheets.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Login = table.Column<string>(type: "text", nullable: true),
+                    Password = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contracts",
                 columns: table => new
                 {
@@ -46,7 +61,7 @@ namespace TimeSheets.Migrations
                     CustomerId = table.Column<int>(type: "integer", nullable: true),
                     JobIdC = table.Column<int>(type: "integer", nullable: false),
                     NumberContract = table.Column<int>(type: "integer", nullable: false),
-                    IsDelete = table.Column<int>(type: "integer", nullable: false)
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,7 +82,8 @@ namespace TimeSheets.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerIdI = table.Column<int>(type: "integer", nullable: false),
                     CustomerId = table.Column<int>(type: "integer", nullable: true),
-                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,11 +104,12 @@ namespace TimeSheets.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerIdJ = table.Column<int>(type: "integer", nullable: false),
                     CustomerId = table.Column<int>(type: "integer", nullable: true),
-                    EmployeeIDJ = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeIdJ = table.Column<int>(type: "integer", nullable: false),
                     EmployeeId = table.Column<int>(type: "integer", nullable: true),
                     Title = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     ContractId = table.Column<int>(type: "integer", nullable: true),
                     InvoiceId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -136,7 +153,8 @@ namespace TimeSheets.Migrations
                     EmployeeIdT = table.Column<int>(type: "integer", nullable: false),
                     EmployeeId = table.Column<int>(type: "integer", nullable: true),
                     FromTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    ToTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -200,6 +218,9 @@ namespace TimeSheets.Migrations
         {
             migrationBuilder.DropTable(
                 name: "TimeSheets");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Jobs");

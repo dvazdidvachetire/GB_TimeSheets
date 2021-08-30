@@ -17,6 +17,7 @@ namespace TimeSheets.DAL.Repositories.Context
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<TimeSheet> TimeSheets { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbContextRepository(DbContextOptions<DbContextRepository> options) : base(options)
         {

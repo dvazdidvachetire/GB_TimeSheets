@@ -26,21 +26,20 @@ namespace TimeSheets.DAL.Repositories
             {
                 await _context.AddAsync(timeSheet);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.Write(e.Message);
                 return false;
             }
-
-            return true;
         }
 
         public async Task<IReadOnlyList<TimeSheet>> GetObjects()
         {
             try
             {
-                return await _context.TimeSheets.ToListAsync();
+                return await _context.TimeSheets.Where(t => t.IsDeleted == false).ToListAsync();
             }
             catch (Exception e)
             {

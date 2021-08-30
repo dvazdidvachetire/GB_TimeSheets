@@ -14,5 +14,6 @@ namespace TimeSheets.DAL.Models
         [JsonIgnore] public Customer Customer { get; set; }
         public DateTimeOffset Date { get; set; }
         [JsonIgnore] public IList<Job> Jobs { get; set; }
+        [JsonIgnore] public bool IsDeleted { get; set; }
     }
 }

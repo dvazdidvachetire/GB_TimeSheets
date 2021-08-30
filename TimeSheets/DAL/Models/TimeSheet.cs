@@ -17,5 +17,6 @@ namespace TimeSheets.DAL.Models
         [JsonIgnore] public Employee Employee { get; set; }
         public DateTimeOffset FromTime { get; set; }
         public DateTimeOffset ToTime { get; set; }
+        [JsonIgnore] public bool IsDeleted { get; set; }
     }
 }

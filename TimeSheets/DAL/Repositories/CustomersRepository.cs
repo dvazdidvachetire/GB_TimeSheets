@@ -26,14 +26,13 @@ namespace TimeSheets.DAL.Repositories
             {
                 await _context.AddAsync(customer);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
                 Debug.Write($"Ошибка! Ошибка! {e.Message}");
                 return false;
             }
-
-            return true;
         }
 
         public async Task<IReadOnlyList<Customer>> GetObjects()
@@ -67,10 +66,18 @@ namespace TimeSheets.DAL.Repositories
 
         public async Task<bool> DeleteObjects(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            customer.IsDeleted = true;
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                var customer = await _context.Customers.FindAsync(id);
+                customer.IsDeleted = true;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+                return false;
+            }
         }
     }
 }

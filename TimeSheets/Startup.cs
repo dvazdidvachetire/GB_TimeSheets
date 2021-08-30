@@ -37,6 +37,7 @@ namespace TimeSheets
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDataProtection();
 
             services.AddDbContext<DbContextRepository>(op => op.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -103,6 +104,7 @@ namespace TimeSheets
             services.AddScoped<IContractsRepository, ContractsRepository>();
             services.AddScoped<IInvoicesRepository, InvoicesRepository>();
             services.AddScoped<ITimeSheetRepository, TimeSheetRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         private void ConfigureServicesLogic(IServiceCollection services)
