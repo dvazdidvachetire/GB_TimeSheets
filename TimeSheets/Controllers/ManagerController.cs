@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DTO;
-using TimeSheets.Models;
+using TimeSheets.DAL.Models;
+using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers
 {
@@ -12,116 +15,60 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class ManagerController : ControllerBase
     {
-        private readonly Repositories _repositories;
+        private readonly IManagerService _managerService;
 
-        public ManagerController(Repositories repositories)
+        public ManagerController(IManagerService managerService)
         {
-            _repositories = repositories;
+            _managerService = managerService;
         }
 
-        /// <summary>
-        /// Создает задачи
-        /// </summary>
-        /// <param name="task">Задача</param>
-        /// <returns>Список задач</returns>
-        [HttpPost("task")]
-        public IActionResult CreateTask([FromBody] Task task)
+        [HttpPost("job")]
+        public async Task<IActionResult> CreateJob([FromBody] Job job)
         {
-            _repositories.Tasks.Add(task);
-            return Ok(_repositories.Tasks);
+            var jobs = await _managerService.CreateJob(job);
+            return Ok(jobs);
         }
 
-        /// <summary>
-        /// Создает контракты
-        /// </summary>
-        /// <param name="contract">Контракт</param>
-        /// <returns>Список контрактов</returns>
         [HttpPost("contract")]
-        public IActionResult CreateContract([FromBody] Contract contract)
+        public async Task<IActionResult> CreateContract([FromBody] Contract contract)
         {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == contract.CustomerId);
-            var tasks = _repositories.Tasks.Where(t => t.CustomerId == customer?.Id);
-            var contractDto = new ContractDto
-            {
-                Id = contract.Id,
-                NumberContract = contract.NumberContract,
-                Customer = customer,
-                Tasks = tasks
-            };
-
-            _repositories.Contracts.Add(contractDto);
-
-            return Ok(_repositories.Contracts);
-        }
-
-        /// <summary>
-        /// Формирует счет
-        /// </summary>
-        /// <param name="invoice">Счет</param>
-        /// <returns>Счет</returns>
-        [HttpPost("invoice")]
-        public IActionResult CreateInvoice([FromBody] Invoice invoice)
-        {
-            var customer = _repositories.Customers.SingleOrDefault(c => c.Id == invoice.CustomerId);
-            var tasks = _repositories.TaskDtos.Where(t => t.CustomerId == customer.Id).ToList();
-
-            var totalSum = tasks.Select(t => t.Amount).Sum();
-
-            var invoiceDto = new InvoiceDto
-            {
-                Id = invoice.Id,
-                Customer = customer,
-                Tasks = tasks,
-                TotalSum = totalSum
-            };
-
-            _repositories.InvoiceDtos.Add(invoiceDto);
-
-            return Ok(invoiceDto);
-        }
-
-        /// <summary>
-        /// Возвращает контракты конкретного покупателя
-        /// </summary>
-        /// <param name="id">ид покупателя</param>
-        /// <returns>Список контрактов конкретного покупателя</returns>
-        [HttpGet("{id}/customer_contracts")]
-        public IActionResult GetContractById([FromRoute] int id)
-        {
-            var contracts = _repositories.Contracts.Where(c => c.Customer.Id == id);
+            var contracts = await _managerService.CreateContract(contract);
             return Ok(contracts);
         }
 
-        /// <summary>
-        /// Возвращает счета конкретного покупателя
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>Список счетов конкретного покупателя</returns>
-        [HttpGet("{id}/customer_invoices")]
-        public IActionResult GetInvoicesById([FromRoute] int id)
+        [HttpPost("invoice")]
+        public async Task<IActionResult> CreateInvoice([FromBody] Invoice invoice)
         {
-            var invoices = _repositories.InvoiceDtos.Where(i => i.Customer.Id == id);
+            var invoices = await _managerService.CreateInvoice(invoice);
             return Ok(invoices);
         }
 
-        /// <summary>
-        /// Возвращает все контракты
-        /// </summary>
-        /// <returns>Список контрактов</returns>
-        [HttpGet("contracts")]
-        public IActionResult GetAllContracts()
+        [HttpGet("{id}/customer_contracts")]
+        public async Task<IActionResult> GetContractsById([FromRoute] int id)
         {
-            return Ok(_repositories.Contracts);
+            var contracts = await _managerService.GetContractsCustomer(id);
+            return Ok(contracts);
         }
 
-        /// <summary>
-        /// Возвращает все счета
-        /// </summary>
-        /// <returns>Список счетов</returns>
-        [HttpGet("exposed_invoices")]
-        public IActionResult GetAllInvoices()
+        [HttpGet("{id}/customer_invoices")]
+        public async Task<IActionResult> GetInvoicesById([FromRoute] int id)
         {
-            return Ok(_repositories.InvoiceDtos);
+            var invoices = await _managerService.GetInvoicesCustomer(id);
+            return Ok(invoices);
+        }
+
+        [HttpGet("contracts")]
+        public async Task<IActionResult> GetContracts()
+        {
+            var contracts = await _managerService.GetContracts();
+            return Ok(contracts);
+        }
+
+        [HttpGet("invoices")]
+        public async Task<IActionResult> GetInvoices()
+        {
+            var invoices = await _managerService.GetInvoices();
+            return Ok(invoices);
         }
     }
 }

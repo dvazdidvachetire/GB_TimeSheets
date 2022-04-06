@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Models;
+using TimeSheets.DTO;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Interfaces
 {
-    public class Manager
+    public interface IManagerRepository
     {
-        
     }
 }

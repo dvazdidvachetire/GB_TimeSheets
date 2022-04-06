@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using TimeSheets.Models;
-using Task = TimeSheets.Models.Task;
+using TimeSheets.DAL.Models;
 
 namespace TimeSheets.DTO
 {
@@ -14,6 +13,6 @@ namespace TimeSheets.DTO
         [JsonIgnore] public int Id { get; set; }
         public int NumberContract { get; set; }
         public Customer Customer { get; set; }
-        public IEnumerable<Task> Tasks { get; set; }
+        public IEnumerable<Job> Jobs { get; set; }
     }
 }

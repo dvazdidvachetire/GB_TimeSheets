@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using TimeSheets.Models;
 
-namespace TimeSheets.DTO
+namespace TimeSheets.DAL.Models
 {
-    public class TaskDto
+    public class Job
     {
-        [JsonIgnore] public int Id { get; set; }
-        [JsonIgnore] public int CustomerId { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
-        public TimeSheet TimeSheet { get; set; }
+        [JsonIgnore] public TimeSheet TimeSheet { get; set; }
     }
 }

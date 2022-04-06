@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Models
 {
-    public class InvoiceTask
+    public class Employee
     {
         public int Id { get; set; }
-        public int TaskId { get; set; }
-        public int InvoiceId { get; set; }
+        public string FullName { get; set; }
     }
 }

@@ -11,6 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
+using TimeSheets.DAL.Repositories;
+using TimeSheets.Services.Interfaces;
+using TimeSheets.Services.Logic;
 
 namespace TimeSheets
 {
@@ -28,12 +32,30 @@ namespace TimeSheets
         {
 
             services.AddControllers();
-            services.AddSingleton<Repositories>();
+
+            ConfigureServicesRepositories(services);
+            ConfigureServicesLogic(services);
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TimeSheets", Version = "v1" });
             });
+        }
+
+        private void ConfigureServicesRepositories(IServiceCollection services)
+        {
+            services.AddSingleton<ICustomersRepository, CustomersRepository>();
+            services.AddSingleton<IEmployeesRepository, EmployeesRepository>();
+            services.AddSingleton<IJobRepository, JobRepository>();
+            services.AddSingleton<IContractsRepository, ContractsRepository>();
+            services.AddSingleton<IInvoicesRepository, InvoicesRepository>();
+        }
+
+        private void ConfigureServicesLogic(IServiceCollection services)
+        {
+            services.AddSingleton<ICustomerService, CustomerService>();
+            services.AddSingleton<IEmployeeService, EmployeeService>();
+            services.AddSingleton<IManagerService, ManagerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

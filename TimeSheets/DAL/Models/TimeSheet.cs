@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Models
 {
     public class TimeSheet
     {

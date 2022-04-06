@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeSheets.DAL.Interfaces;
+using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
-using TimeSheets.Models;
+using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers
 {
@@ -13,145 +15,67 @@ namespace TimeSheets.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly Repositories _repositories;
+        private readonly IEmployeeService _employeeService;
 
-        public EmployeesController(Repositories repositories)
+        public EmployeesController(IEmployeeService employeeService)
         {
-            _repositories = repositories;
+            _employeeService = employeeService;
         }
 
-        /// <summary>
-        /// Создает нового сотрудника
-        /// </summary>
-        /// <param name="employee">Сотрудник</param>
-        /// <returns>Строка об успешной регистрации</returns>
         [HttpPost("register")]
-        public IActionResult Create([FromBody] Employee employee)
+        public async Task<IActionResult> Create([FromBody] Employee employee)
         {
-            _repositories.Employees.Add(employee);
-            return Ok("Регистрация прошла успешно!");
+            var employees = await _employeeService.RegisterEmployee(employee);
+            return Ok(employees);
         }
 
-        /// <summary>
-        /// Получает конкретную сделанную задачу конкретного сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="idT">ид задачи</param>
-        /// <returns>Задача</returns>
-        [HttpGet("{id}/completed_task/{idT}")]
-        public IActionResult GetEmployeeTask([FromRoute] int id, [FromRoute] int idT)
+        [HttpGet("{id}/completed_task/{idJ}")]
+        public async Task<IActionResult> GetJobEmployee([FromRoute] int id, [FromRoute] int idJ)
         {
-            var tasks = _repositories.TaskDtos.Where(t => t.TimeSheet.EmployeeId == id);
-            var task = tasks.SingleOrDefault(t => t.Id == idT);
+            var task = await _employeeService.GetJobEmployee(id, idJ);
             return Ok(task);
         }
 
-        /// <summary>
-        /// Возвращает список сделанных задач конкретного сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Список задач</returns>
         [HttpGet("{id}/completed_tasks")]
-        public IActionResult GetEmployeeTasks([FromRoute] int id)
+        public async Task<IActionResult> GetJobsEmployee([FromRoute] int id)
         {
-            var tasks = _repositories.TaskDtos.Where(t => t.TimeSheet.EmployeeId == id);
+            var tasks = await _employeeService.GetJobsEmployee(id);
             return Ok(tasks);
         }
 
-        /// <summary>
-        /// Возвращает конкретную задачу
-        /// </summary>
-        /// <param name="id">ид задачи</param>
-        /// <returns>Задача</returns>
         [HttpGet("task/{id}")]
-        public IActionResult GetTask([FromRoute] int id)
+        public async Task<IActionResult> GetJob([FromRoute] int id)
         {
-            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
+            var task = await _employeeService.GetJob(id);
             return Ok(task);
         }
 
-        /// <summary>
-        /// Возвращает список всех задач
-        /// </summary>
-        /// <returns>Список задач</returns>
         [HttpGet("tasks")]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllJobs()
         {
-            return Ok(_repositories.Tasks);
+            var tasks = await _employeeService.GetJobs();
+            return Ok(tasks);
         }
 
-        /// <summary>
-        /// Возвращает профиль сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Профиль сотрудника</returns>
-        [HttpGet("{id}/profile")]
-        public IActionResult GetProfile([FromRoute] int id)
-        {
-            var employee = _repositories.Employees.SingleOrDefault(e => e.Id == id);
-            return Ok(employee);
-        }
-
-        /// <summary>
-        /// Дает возможность сотруднику изменить табель задачи 
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="timeSheet">табель</param>
-        /// <returns>Измененная задача</returns>
         [HttpPut("task/{id}/timesheet")]
-        public IActionResult CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
+        public async Task<IActionResult> CreateTimeSheet([FromRoute] int id, [FromBody] TimeSheet timeSheet)
         {
-            var task = _repositories.Tasks.SingleOrDefault(t => t.Id == id);
-            task.TimeSheet = timeSheet;
-
-            var taskDto = new TaskDto
-            {
-                CustomerId = task.CustomerId,
-                Title = task.Title,
-                Description = task.Description,
-                Amount = task.Amount,
-                TimeSheet = timeSheet
-            };
-
-            _repositories.TaskDtos.Add(taskDto);
-
+            var taskDto = await _employeeService.ChangeTimeSheet(id, timeSheet);
             return Ok(taskDto);
         }
 
-        /// <summary>
-        /// Дает возможность сотруднику изменить его профиль
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <param name="employee">сотрудник</param>
-        /// <returns>Строка о успешном изменении профиля</returns>
         [HttpPut("{id}/edit_profile_employee")]
-        public IActionResult EditProfile([FromRoute] int id, [FromBody] Employee employee)
+        public async Task<IActionResult> EditProfile([FromRoute] int id, [FromBody] Employee employee)
         {
-            _repositories.Employees = _repositories.Employees.Select(e =>
-            {
-                if (e.Id == id)
-                {
-                    e = employee;
-                    return e;
-                }
-
-                return e;
-
-            }).ToList();
-
-            return Ok("Профиль успешно изменен!");
+            var employees = await _employeeService.ChangeEmployee(id, employee);
+            return Ok(employees);
         }
 
-        /// <summary>
-        /// Удаляет профиль сотрудника
-        /// </summary>
-        /// <param name="id">ид сотрудника</param>
-        /// <returns>Срока об успешном удалении</returns>
         [HttpDelete("delete_profile_employee")]
-        public IActionResult DeleteProfile([FromRoute] int id)
+        public async Task<IActionResult> DeleteProfile([FromRoute] int id)
         {
-            _repositories.Employees.RemoveAt(id);
-            return Ok("Профиль успешно удален!");
+            var employees = await _employeeService.DeleteEmployee(id);
+            return Ok(employees);
         }
     }
 }

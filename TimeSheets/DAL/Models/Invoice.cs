@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TimeSheets.Models
+namespace TimeSheets.DAL.Models
 {
     public class Invoice
     {
