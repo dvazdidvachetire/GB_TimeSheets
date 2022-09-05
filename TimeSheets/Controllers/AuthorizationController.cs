@@ -5,16 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AuthorizationController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthenticateController(IAuthService authService)
+        public AuthorizationController(IAuthService authService,
+            IDataProtector protector)
         {
             _authService = authService;
         }

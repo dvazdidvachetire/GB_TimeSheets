@@ -10,8 +10,9 @@ namespace TimeSheets.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<TokenResponse> Authenticate(string user, string password);
+        Task<TokenResponse> Authenticate(string login, string password);
         Task<string> RefreshToken(string token);
         Task SetTokenCookie(string token, HttpResponse response);
     }
 }
+

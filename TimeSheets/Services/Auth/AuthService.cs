@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
 using TimeSheets.Services.Interfaces;
 
@@ -14,15 +15,30 @@ namespace TimeSheets.Services.Auth
 {
     public sealed class AuthService : IAuthService
     {
+        private readonly IUserRepository _repository;
         private IDictionary<string, AuthResponse> _users = new Dictionary<string, AuthResponse>(){ {"test", new AuthResponse{ Password = "test"}} };
         public const string SecretCode = "printer printer printer printer printer printer printer printer printer printer printer";
 
-        public async Task<TokenResponse> Authenticate(string user, string password)
+        public AuthService(IUserRepository repository)
         {
-            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password))
+            _repository = repository;
+        }
+
+        public async Task<TokenResponse> Authenticate(string login, string password)
+        {
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 return null;
             }
+
+            var users = await _repository.GetObjects();
+
+            if (users.Count == 0)
+            {
+                await CreateUser(login, password);
+            }
+
+            var user = await Task.Run(() => users.SingleOrDefault(u => u.Login == login));
 
             var tokenResponse = new TokenResponse();
 
@@ -33,7 +49,7 @@ namespace TimeSheets.Services.Auth
                 foreach (var pair in _users)
                 {
                     i++;
-                    if (string.CompareOrdinal(pair.Key, user) == 0 && string.CompareOrdinal(pair.Value.Password, password) == 0)
+                    if (string.CompareOrdinal(user?.Password, password) == 0)
                     {
                         tokenResponse.Token = await GenerateJwtToken(i, 15);
                         var refreshToken = await GenerateRefreshToken(i);
@@ -44,6 +60,17 @@ namespace TimeSheets.Services.Auth
                 }
 
                 return null;
+            });
+        }
+
+        private async Task CreateUser(string login, string password)
+        {
+            await Task.Run(async () =>
+            {
+                var user = new User();
+                user.Login = login;
+                user.Password = password;
+                await _repository.CreateObjects(user);
             });
         }
 
