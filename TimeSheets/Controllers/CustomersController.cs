@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using TimeSheets.DAL.Interfaces;
-using TimeSheets.DAL.Models;
-using TimeSheets.DTO;
+using TimeSheets.Infrastructure.Models;
 using TimeSheets.Services.Interfaces;
 
 namespace TimeSheets.Controllers

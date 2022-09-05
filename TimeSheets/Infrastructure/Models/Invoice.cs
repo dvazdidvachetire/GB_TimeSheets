@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace TimeSheets.DAL.Models
+namespace TimeSheets.Infrastructure.Models
 {
     public class Invoice
     {

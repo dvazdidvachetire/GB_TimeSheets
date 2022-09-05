@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using TimeSheets.DAL.Models;
-using Task = TimeSheets.DAL.Models.Job;
+using TimeSheets.Infrastructure.Models;
+using Task = TimeSheets.Infrastructure.Models.Job;
 
 namespace TimeSheets.DTO
 {

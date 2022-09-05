@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TimeSheets.DAL.Interfaces;
-using TimeSheets.DAL.Models;
 using TimeSheets.DTO;
+using TimeSheets.Infrastructure.Models;
+using TimeSheets.Interfaces;
 
-namespace TimeSheets.DAL.Repositories
+namespace TimeSheets.Infrastructure.Repositories
 {
     public class InvoicesRepository : IInvoicesRepository
     {
