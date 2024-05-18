@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Routing.Constraints;
 using TimeSheets.DAL.Interfaces;
 using TimeSheets.DAL.Models;
-using TimeSheets.DAL.Repositories;
 using TimeSheets.DTO;
 using TimeSheets.Services.Interfaces;
 
@@ -39,33 +35,33 @@ namespace TimeSheets.Services.Logic
 
         public async Task<bool> CreateJob(Job job)
         {
-            return await _jobRepository.CreateObjects(job);
+            return await _jobRepository.CreateObjectsAsync(job);
         }
 
         public async Task<bool> CreateContract(Contract contract)
         {
-            return await _contractsRepository.CreateObjects(contract);
+            return await _contractsRepository.CreateObjectsAsync(contract);
         }
 
         public async Task<bool> CreateInvoice(Invoice invoice)
         {
-            return await _invoicesRepository.CreateObjects(invoice);
+            return await _invoicesRepository.CreateObjectsAsync(invoice);
         }
 
         public async Task<IReadOnlyList<Contract>> GetContracts()
         {
-            return await _contractsRepository.GetObjects();
+            return await _contractsRepository.GetObjectsAsync();
         }
 
         public async Task<IReadOnlyList<Invoice>> GetInvoices()
         {
-            return await _invoicesRepository.GetObjects();
+            return await _invoicesRepository.GetObjectsAsync();
         }
 
         public async Task<ContractDto> GetContractCustomer(int id)
         {
             var contracts = await GetContracts();
-            var customers = await _customersRepository.GetObjects();
+            var customers = await _customersRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 
@@ -79,7 +75,7 @@ namespace TimeSheets.Services.Logic
                 }
                 ));
 
-            var jobs = await _jobRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjectsAsync();
 
             return await Task.Run(() => contractsWithCustomers.GroupJoin(jobs,
                 c => c.Id,
@@ -95,10 +91,10 @@ namespace TimeSheets.Services.Logic
         public async Task<InvoiceDto> GetInvoiceCustomer(int id)
         {
             var invoices = await GetInvoices();
-            var customers = await _customersRepository.GetObjects();
-            var jobs = await _jobRepository.GetObjects();
-            var timeSheets = await _timeSheetRepository.GetObjects();
-            var employees = await _employeesRepository.GetObjects();
+            var customers = await _customersRepository.GetObjectsAsync();
+            var jobs = await _jobRepository.GetObjectsAsync();
+            var timeSheets = await _timeSheetRepository.GetObjectsAsync();
+            var employees = await _employeesRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 

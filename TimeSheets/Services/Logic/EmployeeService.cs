@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using TimeSheets.DAL.Interfaces;
@@ -30,7 +29,7 @@ namespace TimeSheets.Services.Logic
 
         public async Task<bool> RegisterEmployee(Employee employee)
         {
-            return await _employeesRepository.CreateObjects(employee);
+            return await _employeesRepository.CreateObjectsAsync(employee);
         }
 
         public async Task<JobEmployeeDto> GetCompletedJob(int id, int idJ)
@@ -41,8 +40,8 @@ namespace TimeSheets.Services.Logic
 
         public async Task<IReadOnlyList<JobEmployeeDto>> GetCompletedJobs(int id)
         {
-            var employee = await _employeesRepository.GetObjects();
-            var timeSheets = await _timeSheetRepository.GetObjects();
+            var employee = await _employeesRepository.GetObjectsAsync();
+            var timeSheets = await _timeSheetRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 
@@ -56,8 +55,8 @@ namespace TimeSheets.Services.Logic
                     return mapper.Map<TimeSheetDto>(timeSheet);
                 }).ToList());
 
-            var jobs = await _jobRepository.GetObjects();
-            var customers = await _customersRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjectsAsync();
+            var customers = await _customersRepository.GetObjectsAsync();
 
             var jobsEmployee = await Task.Run(() => jobs.Join(customers,
                 j => j.CustomerIdJ,
@@ -78,8 +77,8 @@ namespace TimeSheets.Services.Logic
 
         public async Task<IReadOnlyList<JobDto>> GetJobs()
         {
-            var jobs = await _jobRepository.GetObjects();
-            var customers = await _customersRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjectsAsync();
+            var customers = await _customersRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 
@@ -95,18 +94,18 @@ namespace TimeSheets.Services.Logic
 
         public async Task<bool> ChangeEmployee(int id, Employee employee)
         {
-            return await _employeesRepository.UpdateObjects(id, employee);
+            return await _employeesRepository.UpdateObjectsAsync(id, employee);
         }
 
         public async Task<bool> CreateTimeSheet(int id, TimeSheet timeSheet)
         {
             timeSheet.JobIdT = id;
-            return await _timeSheetRepository.CreateObjects(timeSheet);
+            return await _timeSheetRepository.CreateObjectsAsync(timeSheet);
         }
 
         public async Task<bool> DeleteEmployee(int id)
         {
-           return await _employeesRepository.DeleteObjects(id);
+           return await _employeesRepository.DeleteObjectsAsync(id);
         }
 
         private async Task<IMapper> MapperConfiguration()

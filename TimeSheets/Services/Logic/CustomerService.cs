@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using TimeSheets.DAL.Interfaces;
@@ -37,18 +35,18 @@ namespace TimeSheets.Services.Logic
 
         public async Task<bool> RegisterCustomer(Customer customer)
         {
-            return await _customersRepository.CreateObjects(customer);
+            return await _customersRepository.CreateObjectsAsync(customer);
         }
 
         public async Task<IReadOnlyList<Customer>> GetCustomers()
         {
-            return await _customersRepository.GetObjects();
+            return await _customersRepository.GetObjectsAsync();
         }
 
         public async Task<ContractDto> GetContractCustomer(int id)
         {
-            var contracts = await _contractsRepository.GetObjects();
-            var customers = await _customersRepository.GetObjects();
+            var contracts = await _contractsRepository.GetObjectsAsync();
+            var customers = await _customersRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 
@@ -62,7 +60,7 @@ namespace TimeSheets.Services.Logic
                 }
             ));
 
-            var jobs = await _jobRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjectsAsync();
 
             return await Task.Run(() => contractsWithCustomers.GroupJoin(jobs,
                 c => c.Id,
@@ -77,17 +75,17 @@ namespace TimeSheets.Services.Logic
 
         public async Task<IReadOnlyList<Contract>> GetContracts(int id)
         {
-            var contracts = await _contractsRepository.GetObjects();
+            var contracts = await _contractsRepository.GetObjectsAsync();
             return await Task.Run(() => contracts.Where(c => c.CustomerIdC == id).ToList());
         }
 
         public async Task<InvoiceDto> GetInvoiceCustomer(int id)
         {
-            var invoices = await _invoicesRepository.GetObjects();
+            var invoices = await _invoicesRepository.GetObjectsAsync();
             var customers = await GetCustomers();
-            var jobs = await _jobRepository.GetObjects();
-            var timeSheets = await _timeSheetRepository.GetObjects();
-            var employees = await _employeesRepository.GetObjects();
+            var jobs = await _jobRepository.GetObjectsAsync();
+            var timeSheets = await _timeSheetRepository.GetObjectsAsync();
+            var employees = await _employeesRepository.GetObjectsAsync();
 
             var mapper = await MapperConfiguration();
 
@@ -136,18 +134,18 @@ namespace TimeSheets.Services.Logic
 
         public async Task<IReadOnlyList<Invoice>> GetInvoices(int id)
         {
-            var invoices = await _invoicesRepository.GetObjects();
+            var invoices = await _invoicesRepository.GetObjectsAsync();
             return await Task.Run(() => invoices.Where(i => i.CustomerIdI == id).ToList());
         }
 
         public async Task<bool> ChangeCustomer(int id, Customer customer)
         {
-            return await _customersRepository.UpdateObjects(id, customer);
+            return await _customersRepository.UpdateObjectsAsync(id, customer);
         }
 
         public async Task<bool> DeleteCustomer(int id)
         {
-            return await _customersRepository.DeleteObjects(id);
+            return await _customersRepository.DeleteObjectsAsync(id);
         }
 
         private async Task<IMapper> MapperConfiguration()

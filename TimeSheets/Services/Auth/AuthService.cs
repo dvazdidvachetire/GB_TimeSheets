@@ -31,11 +31,11 @@ namespace TimeSheets.Services.Auth
                 return null;
             }
 
-            var users = await _repository.GetObjects();
+            var users = await _repository.GetObjectsAsync();
 
-            if (users.Count == 0)
+            if (!users.Any())
             {
-                await CreateUser(login, password);
+                await CreateUserAsync(login, password);
             }
 
             var user = await Task.Run(() => users.SingleOrDefault(u => u.Login == login));
@@ -63,15 +63,15 @@ namespace TimeSheets.Services.Auth
             });
         }
 
-        private async Task CreateUser(string login, string password)
+        private async Task CreateUserAsync(string login, string password)
         {
-            await Task.Run(async () =>
+            var user = new User
             {
-                var user = new User();
-                user.Login = login;
-                user.Password = password;
-                await _repository.CreateObjects(user);
-            });
+                Login = login,
+                Password = password
+            };
+
+            await _repository.CreateObjectsAsync(user);
         }
 
         public async Task<string> RefreshToken(string token)
