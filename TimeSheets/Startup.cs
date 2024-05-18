@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 using TimeSheets.DAL.Repositories.Context;
 using TimeSheets.Services.Auth;
 using TimeSheets.Services.Interfaces;
@@ -23,7 +23,7 @@ namespace TimeSheets
         {
             services.AddControllers();
 
-            services.AddDbContext<DbContextRepository>(op => op.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DbContextRepository>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.RegisterRepositories();
             services.RegisterOtherServices();
